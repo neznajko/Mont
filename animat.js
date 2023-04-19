@@ -748,50 +748,57 @@ class Alphabet {
 }
 ////////////////////////////////////////////////////////////////
 class Charmat {
-    constructor( config ){
-        this.config = config;
-        this.polygon = config.alphabet[ config.charFrom ]
-                      .clone()
-                      .translate( config.offset );
-        this.inc = config.alphabet[ config.charTo ]
-                  .clone()
-                  .translate( config.offset )
-                  .sub( this.polygon )
-                  .div( config.nfFrames );
-        //
-        config.ctx.save();
-        config.ctx.font = config.alphabet.font;
-        //
-        const metricsFrom = config.ctx.measureText( config.charFrom );
+    constructor({ alphabet, charFrom, charTo, 
+                  offset, nfFrames, ctx, delay }){
+        this.charFrom = charFrom;
+        this.charTo = charTo;
+        this.offset = offset;
+        this.nfFrames = nfFrames;
+        this.ctx = ctx;
+        this.delay = delay;
+        this.polygon = alphabet[ charFrom ]
+                       .clone()
+                       .translate( offset );
+        this.inc = alphabet[ charTo ]
+                   .clone()
+                   .translate( offset )
+                   .sub( this.polygon )
+                   .div( nfFrames );
+        ctx.save();
+        ctx.font = alphabet.font;
+        const metricsFrom = ctx.measureText( charFrom );
         const widthFrom = Math.ceil( metricsFrom.width );
         const heightFrom = Math.ceil( metricsFrom.actualBoundingBoxDescent );
-        const metricsTo = config.ctx.measureText( config.charTo );
+        const metricsTo = ctx.measureText( charTo );
         const widthTo = Math.ceil( metricsTo.width );
         const heightTo = Math.ceil( metricsTo.actualBoundingBoxDescent );
         this.width = Math.max( widthFrom, widthTo ) + 1;
         this.height = Math.max( heightFrom, heightTo ) + 3;
     }
     render() {
-        const config = this.config;
-        this.strokeChar( config.charFrom );
+        this.fillChar( this.charFrom );
         setTimeout( () => {
             this.clear( "rgba( 0, 0, 0, 1 )" );
-            this.cycle( config.nfFrames );
-        }, config.delay[ PROLOGUE ]);
+            this.cycle( this.nfFrames );
+        }, this.delay[ PROLOGUE ]);
     }
     clear( fillStyle = "rgba( 0, 0, 0, 0.9 )" ){
-        const config = this.config;
-        config.ctx.fillStyle = fillStyle; 
-        config.ctx.fillRect( config.offset[ X ], 
-                             config.offset[ Y ], 
-                             this.width, 
-                             this.height ); 
+        this.ctx.fillStyle = fillStyle; 
+        this.ctx.fillRect( this.offset[ X ], 
+                           this.offset[ Y ], 
+                           this.width, 
+                           this.height ); 
+    }
+    fillChar( char ){
+        this.ctx.fillStyle = "rgba( 255, 0, 0, 1 )";
+        this.ctx.fillText( char, 
+                           this.offset[ X ], 
+                           this.offset[ Y ]);
     }
     strokeChar( char ){
-        const config = this.config;
-        config.ctx.strokeText( char, 
-                               config.offset[ X ], 
-                               config.offset[ Y ]);
+        this.ctx.strokeText( char, 
+                             this.offset[ X ], 
+                             this.offset[ Y ]);
     }
     clckNext() {
         this.polygon.add( this.inc );
@@ -800,18 +807,19 @@ class Charmat {
         if( j < 0 ){
             setTimeout( () => {
                 this.clear( "rgba( 0, 0, 0, 1 )" );
-                this.strokeChar( this.config.charTo );
-                this.config.ctx.restore();
-            }, this.config.delay[ EPILOGUE ]);
+                this.fillChar( this.charTo );
+                this.ctx.restore();
+            }, this.delay[ EPILOGUE ]);
             return;
         }
         this.clear();
-        this.polygon.createPath( this.config.ctx );
-        this.config.ctx.stroke();
+        this.polygon.createPath( this.ctx );
+        this.ctx.fillStyle = "#f00";
+        this.ctx.fill();
         this.clckNext();
         setTimeout( () => {
            this.cycle( j - 1 );
-        }, this.config.delay[ ACTION ]);
+        }, this.delay[ ACTION ]);
     }
 }
 ///////////////////////////////////////////////////////////////
@@ -821,6 +829,7 @@ class Automat {
         this.ctx.font = font;
         this.ctx.textBaseline = "top";
         this.ctx.strokeStyle = "#f00";
+        this.ctx.fillStyle = "#f00";
         const metrics = this.ctx.measureText( "M" );
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
     }

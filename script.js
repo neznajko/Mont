@@ -10,13 +10,13 @@ if( 0 ){
     console.log( alphabet );
 } else {
     const ctx = canvas.getContext( "2d" );
-    const automat = new Automat( "100px monospace", ctx );
+    const automat = new Automat( "30px monospace", ctx );
     automat.render({
-        stringFrom: "THIS TALE GREW",
-        stringTo:   "IN THE TELLING",
+        stringFrom: "HAHAHAHA THATS VERY FUNNY",
+        stringTo:   "BUT THIS IS STUPID HOLMES",
         offset: new Point( 50, 100 ),
-        nfFrames: 15,
-        delay: [ 500, 1000, 100 ],
+        nfFrames: 10,
+        delay: [ 1000, 300, 0 ],
     });
 }
 ////////////////////////////////////////////////////////////////
