@@ -747,15 +747,87 @@ class Alphabet {
     }
 }
 ////////////////////////////////////////////////////////////////
+class Gradient {
+    static linearFactory( x, y, qq ){
+    // y = Ax + B
+    // y1 = Ax1 + B
+    // y2 = Ax2 + B
+    // A = (y2 - y1)/(x2 - x1)
+    // B = (x2y1 - x1y2)/(x2 - x1)
+        const dX = x[ 1 ] - x[ 0 ];
+        const A = (y[ 1 ] - y[ 0 ])/ dX;
+        const B = (x[ 1 ] * y[ 0 ] - x[ 0 ] * y[ 1 ])/ dX;
+        const m = Math.min( y[ 0 ], y[ 1 ]);
+        return u => {
+            let v = A * u + B;
+            if( u > x[ 0 ] && u < x[ 1 ]){
+                v = m + qq * ( v - m ); // <1>
+            }
+            return Math.round( v );
+        }
+    }
+    static linearStuff({
+        nfFrames,
+        colorFrom,
+        colorTo,
+        qq,
+    }){
+        // <
+        const color = Array.from({ length: nfFrames });
+        const y = Gradient.linearFactory([ 0, nfFrames - 1 ], 
+                                         [ colorFrom, colorTo ],
+                                         qq );
+        for( let frame = 0; frame < nfFrames; frame++ ){
+            color[ frame ] = y( frame );
+        }
+        return color;
+    }
+    constructor({
+        hslFrom,
+        hslTo,
+        nfFrames,
+        qq,
+    }){
+        const HUE = 0,
+              SAT = 1,
+              VAL = 2;
+        const hsl = [ HUE, SAT, VAL ].map( j => {
+            return this.constructor.linearStuff({
+                nfFrames: nfFrames,
+                colorFrom: hslFrom[ j ],
+                colorTo: hslTo[ j ],
+                qq: qq,
+            });
+        });
+        const hue = hsl[ HUE ];
+        const sat = hsl[ SAT ];
+        const val = hsl[ VAL ];
+        this.color = Array.from({ length: nfFrames }).map(( v, j ) => {
+            return `hsl(${hue[ j ]},${sat[ j ]}%,${val[ j ]}%)`;
+        });
+        this.nfFrames = nfFrames;
+    }
+}
+////////////////////////////////////////////////////////////////
 class Charmat {
-    constructor({ alphabet, charFrom, charTo, 
-                  offset, nfFrames, ctx, delay }){
+    constructor({ alphabet, 
+                  charFrom, 
+                  charTo, 
+                  offset, 
+                  nfFrames, 
+                  ctx, 
+                  delay,
+                  fgr,
+                  bgr,
+                 }){
         this.charFrom = charFrom;
         this.charTo = charTo;
         this.offset = offset;
         this.nfFrames = nfFrames;
         this.ctx = ctx;
         this.delay = delay;
+        this.fgr = fgr;
+        this.bgr = bgr;
         this.polygon = alphabet[ charFrom ]
                        .clone()
                        .translate( offset );
@@ -764,6 +836,12 @@ class Charmat {
                    .translate( offset )
                    .sub( this.polygon )
                    .div( nfFrames );
+        this.gradient = new Gradient({
+            hslFrom: [ 0, 0, 0 ],
+            hslTo: [ 0, 0, 100 ],
+            nfFrames: 7,
+            qq: 0.8,
+        });
         ctx.save();
         ctx.font = alphabet.font;
         const metricsFrom = ctx.measureText( charFrom );
@@ -775,22 +853,21 @@ class Charmat {
         this.width = Math.max( widthFrom, widthTo ) + 1;
         this.height = Math.max( heightFrom, heightTo ) + 3;
     }
-    render() {
-        this.fillChar( this.charFrom );
-        setTimeout( () => {
-            this.clear( "rgba( 0, 0, 0, 1 )" );
-            this.cycle( this.nfFrames );
-        }, this.delay[ PROLOGUE ]);
+    async render() {
+        await this.RenderChar( this.charFrom, 0 );
+        await this.RenderPolygons( this.nfFrames );
+        this.gradient.color.reverse();
+        await this.RenderChar( this.charTo, 0 );
     }
-    clear( fillStyle = "rgba( 0, 0, 0, 0.9 )" ){
-        this.ctx.fillStyle = fillStyle; 
+    clear(){
+        this.ctx.fillStyle = this.bgr;
         this.ctx.fillRect( this.offset[ X ], 
                            this.offset[ Y ], 
                            this.width, 
                            this.height ); 
     }
-    fillChar( char ){
-        this.ctx.fillStyle = "rgba( 255, 0, 0, 1 )";
+    fillChar( char, fillStyle ){
+        this.ctx.fillStyle = fillStyle;
         this.ctx.fillText( char, 
                            this.offset[ X ], 
                            this.offset[ Y ]);
@@ -803,37 +880,66 @@ class Charmat {
     clckNext() {
         this.polygon.add( this.inc );
     }
-    cycle( j ){
-        if( j < 0 ){
-            setTimeout( () => {
-                this.clear( "rgba( 0, 0, 0, 1 )" );
-                this.fillChar( this.charTo );
-                this.ctx.restore();
-            }, this.delay[ EPILOGUE ]);
+    RenderCharFrame( char, j ){
+        return new Promise( resolve => {
+            this.clear();
+            this.fillChar( char, this.gradient.color[ j ]);
+            this.strokeChar( char );
+            setTimeout(() => {
+                resolve( 'Ok' );
+            }, this.delay[ PROLOGUE ]);
+        });
+    }
+    async RenderChar( char, j ){
+        if( j >= this.gradient.nfFrames ){
             return;
         }
-        this.clear();
-        this.polygon.createPath( this.ctx );
-        this.ctx.fillStyle = "#f00";
-        this.ctx.fill();
-        this.clckNext();
-        setTimeout( () => {
-           this.cycle( j - 1 );
-        }, this.delay[ ACTION ]);
+        await this.RenderCharFrame( char, j );
+        await this.RenderChar( char, j + 1 );
+    }
+    RenderPolygonFrame(){
+        return new Promise( resolve => {
+            this.clear();
+            this.polygon.createPath( this.ctx );
+            this.ctx.fillStyle = this.fgr;
+            this.ctx.stroke();
+            this.clckNext();
+            setTimeout(() => {
+                resolve( 'Ok' );
+            }, this.delay[ ACTION ]);
+        });
+    }
+    async RenderPolygons( j ){
+        if( j < 0 ){
+            return;
+        }
+        await this.RenderPolygonFrame();
+        await this.RenderPolygons( j - 1 );
     }
 }
 ///////////////////////////////////////////////////////////////
 class Automat {
-    constructor( font, ctx ){
+    constructor({ font, ctx, fgr, bgr }){
+        ctx.font = font;
+        ctx.textBaseline = "top";
+        ctx.fillStyle = bgr;
+        ctx.fillRect( 0, 
+                      0, 
+                      ctx.canvas.width,
+                      ctx.canvas.height );
+        const metrics = ctx.measureText( "M" );
         this.ctx = ctx;
-        this.ctx.font = font;
-        this.ctx.textBaseline = "top";
-        this.ctx.strokeStyle = "#f00";
-        this.ctx.fillStyle = "#f00";
-        const metrics = this.ctx.measureText( "M" );
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
+        this.fgr = fgr;
+        this.bgr = bgr;
     }
-    render({ stringFrom, stringTo, offset, nfFrames=10, delay=[ 500, 200, 0 ]}){
+////////////////////////////////////////////////////////////////
+    render({ stringFrom, 
+             stringTo, 
+            offset, 
+            nfFrames=10, 
+            delay=[ 500, 200, 0 ],
+        }){
         const alphabet = Alphabet.getAlphabet( this.ctx.font );
         for( let j = 0, n = stringFrom.length; j < n; j++ ){
             const charFrom = stringFrom[ j ];
@@ -846,6 +952,8 @@ class Automat {
                 "nfFrames": charFrom == charTo ? -1 : nfFrames,
                 "ctx": this.ctx,
                 "delay": charFrom == charTo ? [ -1, -1, -1 ] : delay,
+                "fgr": this.fgr,
+                "bgr": this.bgr,
             });
             charmat.render();
             offset.add( this.inc );
@@ -854,3 +962,5 @@ class Automat {
 }
 export { Point, Alphabet, Charmat, Automat };
 ////////////////////////////////////////////////////////////////
+// DOTO: - Redefine T points
+//       - Go slow from fill to stroke and vice verca
