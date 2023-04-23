@@ -747,6 +747,16 @@ class Alphabet {
     }
 }
 ////////////////////////////////////////////////////////////////
+// #abc => [ 10, 11, 12 ]
+function hexStringToArray( hexString ){
+    return [...hexString.slice( 1 )].map( v => {
+        return +( "0x" + v );
+    });
+}
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 class Gradient {
     static linearFactory( x, y, qq ){
     // y = Ax + B
@@ -783,27 +793,32 @@ class Gradient {
         return color;
     }
     constructor({
-        hslFrom,
-        hslTo,
+        hexString,
         nfFrames,
         qq,
     }){
-        const HUE = 0,
-              SAT = 1,
-              VAL = 2;
-        const hsl = [ HUE, SAT, VAL ].map( j => {
+        const FROM = 0,
+              TO = 1;
+        const hexArrayFrom = hexStringToArray( hexString[ FROM ]);
+        const hexArrayTo = hexStringToArray( hexString[ TO ]);
+        const R = 0, 
+              G = 1, 
+              B = 2;
+        const rgb = [ R, G, B ].map( j => {
             return this.constructor.linearStuff({
                 nfFrames: nfFrames,
-                colorFrom: hslFrom[ j ],
-                colorTo: hslTo[ j ],
+                colorFrom: hexArrayFrom[ j ],
+                colorTo: hexArrayTo[ j ],
                 qq: qq,
+            }).map( v => {
+                return v.toString( 16 );
             });
         });
-        const hue = hsl[ HUE ];
-        const sat = hsl[ SAT ];
-        const val = hsl[ VAL ];
+        const r = rgb[ R ];
+        const g = rgb[ G ];
+        const b = rgb[ B ];
         this.color = Array.from({ length: nfFrames }).map(( v, j ) => {
-            return `hsl(${hue[ j ]},${sat[ j ]}%,${val[ j ]}%)`;
+            return `#${r[ j ]}${g[ j ]}${b[ j ]}`;
         });
         this.nfFrames = nfFrames;
     }
@@ -837,8 +852,7 @@ class Charmat {
                    .sub( this.polygon )
                    .div( nfFrames );
         this.gradient = new Gradient({
-            hslFrom: [ 0, 0, 0 ],
-            hslTo: [ 0, 0, 100 ],
+            hexString: [ fgr, bgr ],
             nfFrames: 7,
             qq: 0.8,
         });
@@ -963,4 +977,3 @@ class Automat {
 export { Point, Alphabet, Charmat, Automat };
 ////////////////////////////////////////////////////////////////
 // DOTO: - Redefine T points
-//       - Go slow from fill to stroke and vice verca

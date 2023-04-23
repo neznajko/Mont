@@ -6,41 +6,20 @@ console.log( "Mont" );
 const canvas = document.querySelector( "canvas" );
 const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
 if( 0 ){
-    function resolveAfter2Seconds( j ){
-        return new Promise( resolve => {
-            setTimeout(() => {
-                resolve( j );
-            }, 2000 );
-        });
-    }
-    async function asyncCall( j ){
-        if( j <= 0 ){ 
-            return 10; 
-        }
-        const result = await resolveAfter2Seconds( j );
-        console.log( result );
-        await asyncCall( j - 1 );
-    }
-    await asyncCall( 5 );
-    console.log( "Done" );
-    await asyncCall( 4 );
-    console.log( "haHa" );
 } else {
     const automat = new Automat({ 
-        font: "130px monospace", 
+        font: "40px monospace", 
         ctx: ctx,
-        fgr: "#000",
-        bgr: "#fff",
+        fgr: "#143",
+        bgr: "#5af",
     });
     automat.render({
-        stringFrom: "CHECK",
-        stringTo:   "THIS ",
+        stringFrom: "THE ROCKET EXPLOSION IS SUCCESS NOT ONLY",
+        stringTo:   "FOR S P A C E X BUT FOR T H E HUMAN KIND",
         offset: new Point( 50, 100 ),
         nfFrames: 5,
-        delay: [ 100, 200, 100 ],
+        delay: [ 300, 500, 100 ],
     });
 }
 ////////////////////////////////////////////////////////////////
