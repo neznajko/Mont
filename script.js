@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////
-import { Point, Alphabet, Charmat, Automat } from "./animat.js";
+import { Point, Automat } from "./animat.js";
 ////////////////////////////////////////////////////////////////
 console.log( "Mont" );
 ////////////////////////////////////////////////////////////////
@@ -9,17 +9,17 @@ const ctx = canvas.getContext( "2d" );
 if( 0 ){
 } else {
     const automat = new Automat({ 
-        font: "40px monospace", 
+        font: "120px monospace", 
         ctx: ctx,
-        fgr: "#143",
-        bgr: "#5af",
+        fgr: "#f43",
+        bgr: "#faa",
     });
     automat.render({
-        stringFrom: "THE ROCKET EXPLOSION IS SUCCESS NOT ONLY",
-        stringTo:   "FOR S P A C E X BUT FOR T H E HUMAN KIND",
-        offset: new Point( 50, 100 ),
+        stringFrom: "ABCDEFHOIJKLMNOPY",
+        stringTo:   "IJKLMNOPQRSTUVWXZ",
+        offset: new Point( 45, 150 ),
         nfFrames: 5,
-        delay: [ 300, 500, 100 ],
+        delay: [ 200, 300, 100 ],
     });
 }
 ////////////////////////////////////////////////////////////////
