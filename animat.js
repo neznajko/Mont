@@ -3,9 +3,8 @@ import { monospace } from "./monospace.js";
 ////////////////////////////////////////////////////////////////
 const X = 0;
 const Y = 1;
-const PROLOGUE = 0;
+const LOUNGE = 0;
 const ACTION = 1;
-const EPILOGUE = 2;
 ////////////////////////////////////////////////////////////////
 class Point extends Array {
     clone() {
@@ -258,7 +257,7 @@ class Charmat {
             this.strokeChar( char );
             setTimeout(() => {
                 resolve( 'Ok' );
-            }, this.delay[ PROLOGUE ]);
+            }, this.delay[ LOUNGE ]);
         });
     }
     async RenderChar( char, j ){
@@ -304,13 +303,45 @@ class Automat {
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
         this.fgr = fgr;
         this.bgr = bgr;
+        this.text = [ "LqfQ", "hQaF", "jHqy", "Fafa" ];
+        ctx.fillStyle = fgr;
+        ctx.fillText( this.text[ 0 ], 100, 100 );
+        ctx.fillStyle = bgr;
+        ctx.canvas.focus();
+        this.j = 0;
+        window.addEventListener( "keydown", e => {
+            if( e.key == "ArrowUp" ){
+                if( this.j == 0 ){
+                    return;
+                }
+                this.render({
+                    stringFrom: this.text[ this.j ],
+                    stringTo: this.text[ --this.j ],
+                    offset: new Point( 100, 100 ),
+                    nfFrames: 5,
+                    delay: [200, 100 ],
+                });
+            }
+            if( e.key == "ArrowDown" ){
+                if( this.j == this.text.length - 1 ){
+                    return;
+                }
+                this.render({
+                    stringFrom: this.text[ this.j ],
+                    stringTo: this.text[ ++this.j ],
+                    offset: new Point( 100, 100 ),
+                    nfFrames: 5,
+                    delay: [200, 100 ],
+                });
+            }
+        })
     }
 ////////////////////////////////////////////////////////////////
     render({ stringFrom, 
              stringTo, 
-            offset, 
-            nfFrames=10, 
-            delay=[ 500, 200, 0 ],
+             offset, 
+             nfFrames=10, 
+             delay=[ 500, 200 ],
         }){
         const alphabet = Alphabet.getAlphabet( this.ctx.font );
         for( let j = 0, n = stringFrom.length; j < n; j++ ){
@@ -334,5 +365,5 @@ class Automat {
 }
 export { Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: - measure lower letters: a 
+// DOTO: 
 //    
