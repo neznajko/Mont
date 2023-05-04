@@ -303,7 +303,12 @@ class Automat {
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
         this.fgr = fgr;
         this.bgr = bgr;
-        this.text = [ "LqfQ", "hQaF", "jHqy", "Fafa" ];
+        this.text = [ 
+            "abcde", 
+            "fFawg", 
+            " cCsz",
+            "aAafW" 
+        ];
         ctx.fillStyle = fgr;
         ctx.fillText( this.text[ 0 ], 100, 100 );
         ctx.fillStyle = bgr;
@@ -365,5 +370,5 @@ class Automat {
 }
 export { Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: 
+// DOTO: - eat pizza 
 //    
