@@ -9,7 +9,7 @@ const ctx = canvas.getContext( "2d" );
 if( 0 ){
 } else {
     const automat = new Automat({ 
-        font: "100px monospace", 
+        font: "30px monospace", 
         ctx: ctx,
         fgr: "#f43",
         bgr: "#faa",

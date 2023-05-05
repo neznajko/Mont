@@ -304,15 +304,18 @@ class Automat {
         this.fgr = fgr;
         this.bgr = bgr;
         this.text = [ 
-            "abcde", 
-            "fFawg", 
-            " cCsz",
-            "aAafW" 
+            "Some text here",
+            "like reading a",
+            "book using the",
+            "arrow keys    ", 
         ];
-        ctx.fillStyle = fgr;
-        ctx.fillText( this.text[ 0 ], 100, 100 );
-        ctx.fillStyle = bgr;
-        ctx.canvas.focus();
+        this.render({
+            stringFrom: this.text[ 0 ],
+            stringTo: this.text[ 0 ],
+            offset: new Point( 100, 100 ),
+            nfFrames: 5,
+            delay: [200, 100 ],
+        });
         this.j = 0;
         window.addEventListener( "keydown", e => {
             if( e.key == "ArrowUp" ){
@@ -359,7 +362,7 @@ class Automat {
                 "offset": offset.clone(), 
                 "nfFrames": charFrom == charTo ? -1 : nfFrames,
                 "ctx": this.ctx,
-                "delay": charFrom == charTo ? [ -1, -1, -1 ] : delay,
+                "delay": charFrom == charTo ? [ -1, -1 ] : delay,
                 "fgr": this.fgr,
                 "bgr": this.bgr,
             });
