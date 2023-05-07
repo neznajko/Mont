@@ -287,9 +287,33 @@ class Charmat {
         await this.RenderPolygons( j - 1 );
     }
 }
+////////////////////////////////////////////////////////////////
+function Split( str, nfChar ){
+    const n = str.length;
+    let lst = [];
+    let i = 0;
+    let j = -1; // str.substring( i, j )
+    for( let k = 0; k < n; ++k ){
+        if( str[ k ] == ' '){
+            j = k;
+        }   
+        if( k - i >= nfChar ){
+            lst.push( str.substring( i, j ));
+            i = j + 1;
+        }
+    }
+    if( i < n ){
+        lst.push( str.substring( i ));
+    }
+    return lst;
+}
+///////////////////////////////////////////////////////////////
+function Align( lst, nfChar ){
+    return lst.map( s => s + ' '.repeat( nfChar - s.length ));
+}
 ///////////////////////////////////////////////////////////////
 class Automat {
-    constructor({ font, ctx, fgr, bgr }){
+    constructor({ font, ctx, fgr, bgr, text, nfChar }){
         ctx.font = font;
         ctx.textBaseline = "top";
         ctx.strokeStyle = fgr;
@@ -303,12 +327,8 @@ class Automat {
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
         this.fgr = fgr;
         this.bgr = bgr;
-        this.text = [ 
-            "Some text here",
-            "like reading a",
-            "book using the",
-            "arrow keys    ", 
-        ];
+        this.text = Split( text, nfChar );
+        this.text = Align( this.text, nfChar );
         this.render({
             stringFrom: this.text[ 0 ],
             stringTo: this.text[ 0 ],
@@ -373,5 +393,9 @@ class Automat {
 }
 export { Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: - eat pizza 
-//    
+// DOTO: - 0 1 2 3 4
+//         5 6 7 8 9
+//         . , ! ? -
+//         ; : ( ) '
+//         " + = > <
+//         %
