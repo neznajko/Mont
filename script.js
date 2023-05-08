@@ -8,16 +8,16 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = "When two objects are loosely coupled they \
-can interact but they typically have very little knowledge of \
+    const text = "When tW0 objects are l0osely coupled, they \
+can inte-act, b\"t they typica-ly have very li\"tle knowledge of \
 each other";
     const automat = new Automat({ 
-        font: "50px monospace", 
+        font: "58px monospace", 
         ctx: ctx,
         fgr: "#f43",
         bgr: "#faa",
         text: text,
-        nfChar: 32,
+        nfChar: 10,
     });
 }
 ////////////////////////////////////////////////////////////////
