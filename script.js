@@ -8,16 +8,15 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = "When tW0 objects are l0osely coupled, they \
-can inte-act, b\"t they typica-ly have very li\"tle knowledge of \
-each other";
+    const text = "The Ob<erver Pat=ern !s one of the mo<t co=mon\
+ patterns !n use";
     const automat = new Automat({ 
-        font: "58px monospace", 
+        font: "28px monospace", 
         ctx: ctx,
         fgr: "#f43",
         bgr: "#faa",
         text: text,
-        nfChar: 10,
+        nfChar: 16,
     });
 }
 ////////////////////////////////////////////////////////////////

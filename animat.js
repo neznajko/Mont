@@ -209,7 +209,7 @@ class Charmat {
                    .div( nfFrames );
         this.gradient = new Gradient({
             hexString: [ fgr, bgr ],
-            nfFrames: 7,
+            nfFrames: 5,
             qq: 0.8,
         });
         ctx.save();
@@ -222,11 +222,18 @@ class Charmat {
         const heightTo = Math.ceil( metricsTo.actualBoundingBoxDescent );
         this.width = Math.max( widthFrom, widthTo ) + 1;
         this.height = Math.max( heightFrom, heightTo ) + 4;
+        //
+        this.lineWidthInc = 1/( this.gradient.nfFrames - 1 );
+        this.lineWidth = -this.lineWidthInc;
+        // 0---->1---->2---->3---->4 ...
+        // 0                       1
     }
     async render() {
         await this.RenderChar( this.charFrom, 0 );
         await this.RenderPolygons( this.nfFrames );
         this.gradient.color.reverse();
+        this.lineWidth += this.lineWidthInc;
+        this.lineWidthInc = -this.lineWidthInc;
         await this.RenderChar( this.charTo, 0 );
     }
     clear(){
@@ -243,10 +250,12 @@ class Charmat {
                            this.offset[ Y ]);
     }
     strokeChar( char ){
+        this.lineWidth += this.lineWidthInc;
+        this.ctx.lineWidth = this.lineWidth;
         this.ctx.strokeText( char, 
                              this.offset[ X ], 
                              this.offset[ Y ]);
-    }
+     }
     clckNext() {
         this.polygon.add( this.inc );
     }
@@ -393,11 +402,11 @@ class Automat {
 }
 export { Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: - 0 1 2 3 4  DONE:  0 _ _ _ _
+// DOTO: - 0 1 2 3 4  DONE:  0 _ 2 _ _
 //         5 6 7 8 9         _ _ _ _ _
-//         . , ! ? -         _ , _ _ -
+//         . , ! ? -         _ , ! _ -
 //         ; : ( ) '         _ _ _ _ _
-//         " + = < >         " _ _ _ _
+//         " + = < >         " _ = < _
 //         %                 _
-// - Try not stroking the font
+// - Make line width proportional to font size.
 //
