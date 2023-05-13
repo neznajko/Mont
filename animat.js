@@ -180,6 +180,9 @@ class Gradient {
     }
 }
 ////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////[Charmat]
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 class Charmat {
     constructor({ alphabet, 
                   charFrom, 
@@ -190,7 +193,9 @@ class Charmat {
                   delay,
                   fgr,
                   bgr,
-                 }){
+                  nfFramesGradient= 3,
+                  qq= 0.6,
+                }){
         this.charFrom = charFrom;
         this.charTo = charTo;
         this.offset = offset;
@@ -209,31 +214,37 @@ class Charmat {
                    .div( nfFrames );
         this.gradient = new Gradient({
             hexString: [ fgr, bgr ],
-            nfFrames: 5,
-            qq: 0.8,
+            nfFrames: nfFramesGradient,
+            qq: qq,
         });
         ctx.save();
         ctx.font = alphabet.font;
         const metricsFrom = ctx.measureText( charFrom );
-        const widthFrom = Math.ceil( metricsFrom.width );
-        const heightFrom = Math.ceil( metricsFrom.actualBoundingBoxDescent );
         const metricsTo = ctx.measureText( charTo );
+        const widthFrom = Math.ceil( metricsFrom.width );
         const widthTo = Math.ceil( metricsTo.width );
+        const heightFrom = Math.ceil( metricsFrom.actualBoundingBoxDescent );
         const heightTo = Math.ceil( metricsTo.actualBoundingBoxDescent );
         this.width = Math.max( widthFrom, widthTo ) + 1;
         this.height = Math.max( heightFrom, heightTo ) + 4;
+        this.ctx.lineWidth = 0.4;
+        //console.log( this.width - 1, this.height - 4 );
+        //var maxWidth = 0.5;
+        //if( this.width < 16 ){
+        //    maxWidth *= this.width/ 16;
+        //}
         //
-        this.lineWidthInc = 1/( this.gradient.nfFrames - 1 );
-        this.lineWidth = -this.lineWidthInc;
+        //this.lineWidthInc = maxWidth/( this.gradient.nfFrames - 1 );
+        //this.lineWidth = -this.lineWidthInc;
         // 0---->1---->2---->3---->4 ...
         // 0                       1
     }
     async render() {
         await this.RenderChar( this.charFrom, 0 );
         await this.RenderPolygons( this.nfFrames );
-        this.gradient.color.reverse();
-        this.lineWidth += this.lineWidthInc;
-        this.lineWidthInc = -this.lineWidthInc;
+        //this.gradient.color.reverse();
+        //this.lineWidth += this.lineWidthInc;
+        //this.lineWidthInc = -this.lineWidthInc;
         await this.RenderChar( this.charTo, 0 );
     }
     clear(){
@@ -262,8 +273,9 @@ class Charmat {
     RenderCharFrame( char, j ){
         return new Promise( resolve => {
             this.clear();
-            this.fillChar( char, this.gradient.color[ j ]);
-            this.strokeChar( char );
+            this.fillChar( char, this.fgr );
+            //this.fillChar( char, this.gradient.color[ j ]);
+            //this.strokeChar( char );
             setTimeout(() => {
                 resolve( 'Ok' );
             }, this.delay[ LOUNGE ]);
@@ -282,6 +294,7 @@ class Charmat {
             this.polygon.createPath( this.ctx );
             this.ctx.fillStyle = this.fgr;
             this.ctx.stroke();
+//            this.ctx.fill();
             this.clckNext();
             setTimeout(() => {
                 resolve( 'Ok' );
@@ -321,8 +334,20 @@ function Align( lst, nfChar ){
     return lst.map( s => s + ' '.repeat( nfChar - s.length ));
 }
 ///////////////////////////////////////////////////////////////
+function getRandomInt( min, max ){ // [ min, max ]
+    return Math.floor( Math.random() *( max - min + 1 )) + min;
+}
+///////////////////////////////////////////////////////////////
 class Automat {
-    constructor({ font, ctx, fgr, bgr, text, nfChar }){
+    constructor({ font, 
+                  ctx,
+                  offset,
+                  nfFrames,
+                  delay,      
+                  fgr, 
+                  bgr, 
+                  text, 
+                  nfChar }){
         ctx.font = font;
         ctx.textBaseline = "top";
         ctx.strokeStyle = fgr;
@@ -333,6 +358,8 @@ class Automat {
                       ctx.canvas.height );
         const metrics = ctx.measureText( "M" );
         this.ctx = ctx;
+        this.nfFrames = nfFrames;
+        this.delay = delay;
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
         this.fgr = fgr;
         this.bgr = bgr;
@@ -341,9 +368,7 @@ class Automat {
         this.render({
             stringFrom: this.text[ 0 ],
             stringTo: this.text[ 0 ],
-            offset: new Point( 100, 100 ),
-            nfFrames: 5,
-            delay: [200, 100 ],
+            offset: offset.clone(),
         });
         this.j = 0;
         window.addEventListener( "keydown", e => {
@@ -354,9 +379,7 @@ class Automat {
                 this.render({
                     stringFrom: this.text[ this.j ],
                     stringTo: this.text[ --this.j ],
-                    offset: new Point( 100, 100 ),
-                    nfFrames: 5,
-                    delay: [200, 100 ],
+                    offset: offset.clone(),
                 });
             }
             if( e.key == "ArrowDown" ){
@@ -366,34 +389,31 @@ class Automat {
                 this.render({
                     stringFrom: this.text[ this.j ],
                     stringTo: this.text[ ++this.j ],
-                    offset: new Point( 100, 100 ),
-                    nfFrames: 5,
-                    delay: [200, 100 ],
+                    offset: offset.clone(),
                 });
             }
         })
     }
 ////////////////////////////////////////////////////////////////
-    render({ stringFrom, 
-             stringTo, 
-             offset, 
-             nfFrames=10, 
-             delay=[ 500, 200 ],
-        }){
+    render({ stringFrom, stringTo, offset }){
         const alphabet = Alphabet.getAlphabet( this.ctx.font );
         for( let j = 0, n = stringFrom.length; j < n; j++ ){
             const charFrom = stringFrom[ j ];
             const charTo = stringTo[ j ];
+            const nfFramesGradient = getRandomInt( 1, 1 );
+            const qq = 0.9;
             const charmat = new Charmat({ 
                 "alphabet": alphabet, 
                 "charFrom": charFrom, 
                 "charTo": charTo, 
                 "offset": offset.clone(), 
-                "nfFrames": charFrom == charTo ? -1 : nfFrames,
+                "nfFrames": charFrom == charTo ? -1 : this.nfFrames,
                 "ctx": this.ctx,
-                "delay": charFrom == charTo ? [ -1, -1 ] : delay,
+                "delay": charFrom == charTo ? [ -1, -1 ] : this.delay,
                 "fgr": this.fgr,
                 "bgr": this.bgr,
+                "nfFramesGradient": nfFramesGradient,
+                "qq": qq,
             });
             charmat.render();
             offset.add( this.inc );
@@ -402,11 +422,10 @@ class Automat {
 }
 export { Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: - 0 1 2 3 4  DONE:  0 _ 2 _ _
-//         5 6 7 8 9         _ _ _ _ _
-//         . , ! ? -         _ , ! _ -
-//         ; : ( ) '         _ _ _ _ _
-//         " + = < >         " _ = < _
+// DOTO: - 0 1 2 3 4  DONE:  0 _ 2 _ 4
+//         5 6 7 8 9         _ 6 7 _ _
+//         . , ! ? -         . , ! _ -
+//         ; : ( ) '         ; : ( _ _
+//         " + = < >         " _ = < >
 //         %                 _
-// - Make line width proportional to font size.
-//
+// - Remoo the Gradient and clear the code. 

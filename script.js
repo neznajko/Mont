@@ -8,15 +8,17 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = "The Ob<erver Pat=ern !s one of the mo<t co=mon\
- patterns !n use";
+    const text = "Vithout gra7:ent is 6et7er, clear the co6e.";
     const automat = new Automat({ 
-        font: "28px monospace", 
+        font: "80px monospace", 
         ctx: ctx,
-        fgr: "#f43",
-        bgr: "#faa",
+        offset: new Point( 100, 160 ),
+        nfFrames: 5,
+        delay: [ 100, 100 ], 
+        fgr: "#123", // f43
+        bgr: "#abc", // faa
         text: text,
-        nfChar: 16,
+        nfChar: 10,
     });
 }
 ////////////////////////////////////////////////////////////////
