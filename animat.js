@@ -212,12 +212,6 @@ class Charmat {
                    .translate( offset )
                    .sub( this.polygon )
                    .div( nfFrames );
-        this.gradient = new Gradient({
-            hexString: [ fgr, bgr ],
-            nfFrames: nfFramesGradient,
-            qq: qq,
-        });
-        ctx.save();
         ctx.font = alphabet.font;
         const metricsFrom = ctx.measureText( charFrom );
         const metricsTo = ctx.measureText( charTo );
@@ -227,24 +221,15 @@ class Charmat {
         const heightTo = Math.ceil( metricsTo.actualBoundingBoxDescent );
         this.width = Math.max( widthFrom, widthTo ) + 1;
         this.height = Math.max( heightFrom, heightTo ) + 4;
-        this.ctx.lineWidth = 0.4;
-        //console.log( this.width - 1, this.height - 4 );
-        //var maxWidth = 0.5;
-        //if( this.width < 16 ){
-        //    maxWidth *= this.width/ 16;
-        //}
-        //
-        //this.lineWidthInc = maxWidth/( this.gradient.nfFrames - 1 );
-        //this.lineWidth = -this.lineWidthInc;
+        // 56 is the width of 100px monospace
+        this.ctx.lineWidth = Math.min( 1, 1.0 * this.width / 56 );
+        console.log( this.width );
         // 0---->1---->2---->3---->4 ...
         // 0                       1
     }
     async render() {
         await this.RenderChar( this.charFrom, 0 );
         await this.RenderPolygons( this.nfFrames );
-        //this.gradient.color.reverse();
-        //this.lineWidth += this.lineWidthInc;
-        //this.lineWidthInc = -this.lineWidthInc;
         await this.RenderChar( this.charTo, 0 );
     }
     clear(){
@@ -274,15 +259,13 @@ class Charmat {
         return new Promise( resolve => {
             this.clear();
             this.fillChar( char, this.fgr );
-            //this.fillChar( char, this.gradient.color[ j ]);
-            //this.strokeChar( char );
             setTimeout(() => {
                 resolve( 'Ok' );
             }, this.delay[ LOUNGE ]);
         });
     }
     async RenderChar( char, j ){
-        if( j >= this.gradient.nfFrames ){
+        if( j >= 1 ){ // vhitout Gradient's better
             return;
         }
         await this.RenderCharFrame( char, j );
@@ -294,7 +277,6 @@ class Charmat {
             this.polygon.createPath( this.ctx );
             this.ctx.fillStyle = this.fgr;
             this.ctx.stroke();
-//            this.ctx.fill();
             this.clckNext();
             setTimeout(() => {
                 resolve( 'Ok' );
@@ -400,8 +382,6 @@ class Automat {
         for( let j = 0, n = stringFrom.length; j < n; j++ ){
             const charFrom = stringFrom[ j ];
             const charTo = stringTo[ j ];
-            const nfFramesGradient = getRandomInt( 1, 1 );
-            const qq = 0.9;
             const charmat = new Charmat({ 
                 "alphabet": alphabet, 
                 "charFrom": charFrom, 
@@ -412,8 +392,6 @@ class Automat {
                 "delay": charFrom == charTo ? [ -1, -1 ] : this.delay,
                 "fgr": this.fgr,
                 "bgr": this.bgr,
-                "nfFramesGradient": nfFramesGradient,
-                "qq": qq,
             });
             charmat.render();
             offset.add( this.inc );
@@ -422,10 +400,10 @@ class Automat {
 }
 export { Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: - 0 1 2 3 4  DONE:  0 _ 2 _ 4
-//         5 6 7 8 9         _ 6 7 _ _
+// DOTO: - 0 1 2 3 4  DONE:  0 _ 2 3 4
+//         5 6 7 8 9         5 6 7 8 _
 //         . , ! ? -         . , ! _ -
-//         ; : ( ) '         ; : ( _ _
+//         ; : ( ) '         ; : ( _ '
 //         " + = < >         " _ = < >
 //         %                 _
-// - Remoo the Gradient and clear the code. 
+// - Make separate files for charmat and automat. 

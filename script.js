@@ -8,17 +8,17 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = "Vithout gra7:ent is 6et7er, clear the co6e.";
+    const text = "i ' 2 b > <  8 : ; ( T h a t 2 !";
     const automat = new Automat({ 
-        font: "80px monospace", 
+        font: "150px monospace", 
         ctx: ctx,
         offset: new Point( 100, 160 ),
         nfFrames: 5,
         delay: [ 100, 100 ], 
-        fgr: "#123", // f43
-        bgr: "#abc", // faa
+        fgr: "#5f5",
+        bgr: "#022",
         text: text,
-        nfChar: 10,
+        nfChar: 1,
     });
 }
 ////////////////////////////////////////////////////////////////
