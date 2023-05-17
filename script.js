@@ -8,17 +8,18 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = "i ' 2 b > <  8 : ; ( T h a t 2 !";
+    const text = ", but the goal is to be able to read like a \
+book or something.";
     const automat = new Automat({ 
-        font: "150px monospace", 
+        font: "16px monospace", 
         ctx: ctx,
         offset: new Point( 100, 160 ),
         nfFrames: 5,
         delay: [ 100, 100 ], 
-        fgr: "#5f5",
-        bgr: "#022",
+        fgr: "#000",
+        bgr: "#fff",
         text: text,
-        nfChar: 1,
+        nfChar: 18,
     });
 }
 ////////////////////////////////////////////////////////////////

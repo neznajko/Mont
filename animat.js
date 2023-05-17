@@ -223,7 +223,6 @@ class Charmat {
         this.height = Math.max( heightFrom, heightTo ) + 4;
         // 56 is the width of 100px monospace
         this.ctx.lineWidth = Math.min( 1, 1.0 * this.width / 56 );
-        console.log( this.width );
         // 0---->1---->2---->3---->4 ...
         // 0                       1
     }
