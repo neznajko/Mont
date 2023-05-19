@@ -1,6 +1,5 @@
 ////////////////////////////////////////////////////////////////
 import { Automat } from "./Automat.js";
-import { Point   } from "./Polygon.js";
 ////////////////////////////////////////////////////////////////
 console.log( "Mont" );
 ////////////////////////////////////////////////////////////////
@@ -9,16 +8,16 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = ": )";
+    const txt = "Ch e c k T h u s";
     const automat = new Automat({ 
         font: "200px monospace", 
         ctx: ctx,
-        offset: new Point( 100, 160 ),
+        offset: [ 200, 100 ],
         nfFrames: 5,
         delay: [ 100, 100 ], 
         fgr: "#000",
         bgr: "#fff",
-        text: text,
+        txt: txt,
         nfChar: 1,
     });
 }

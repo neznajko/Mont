@@ -34,29 +34,35 @@ class Alphabet {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 function Split( str, nfChar ){
+    // str = str.trim().split( /\s+/ ).join( " " );
     const n = str.length;
-    let lst = [];
+    let ls = [];
     let i = 0;
     let j = -1; // str.substring( i, j )
     for( let k = 0; k < n; ++k ){
-        if( str[ k ] == ' '){
+        if( str[ k ] == ' ' ){
             j = k;
         }   
         if( k - i >= nfChar ){
-            lst.push( str.substring( i, j ));
+            ls.push( str.substring( i, j ));
             i = j + 1;
         }
     }
     if( i < n ){
-        lst.push( str.substring( i ));
+        ls.push( str.substring( i ));
     }
-    return lst;
+    return ls;
 }
 ///////////////////////////////////////////////////////////////
-function Align( lst, nfChar ){
-    return lst.map( s => s + ' '.repeat( nfChar - s.length ));
+function Align( ls, nfChar ){
+    return ls.map( s => s + ' '.repeat( nfChar - s.length ));
 }
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////-/`=_
+// Return the maximum length word in txt.
+function MaxLenWord( txt ){
+    return Math.max( ...txt.split( /\s+/ ).map( w => w.length ));
+}
+//////////////////////////////////////////////////////////////_
 class Automat {
     constructor({ font, 
                   ctx,
@@ -65,28 +71,29 @@ class Automat {
                   delay,      
                   fgr, 
                   bgr, 
-                  text, 
+                  txt, 
                   nfChar }){
         ctx.font = font;
         ctx.textBaseline = "top";
         ctx.strokeStyle = fgr;
         ctx.fillStyle = bgr;
-        ctx.fillRect( 0, 
-                      0, 
+        ctx.fillRect( 0, 0, 
                       ctx.canvas.width,
                       ctx.canvas.height );
-        const metrics = ctx.measureText( "M" );
         this.ctx = ctx;
+        offset = Point.from( offset );
         this.nfFrames = nfFrames;
         this.delay = delay;
-        this.inc = new Point( Math.ceil( metrics.width ), 0 );
         this.fgr = fgr;
         this.bgr = bgr;
-        this.text = Split( text, nfChar );
-        this.text = Align( this.text, nfChar );
+        nfChar = Math.max( MaxLenWord( txt ), nfChar );
+        this.txt = Split( txt, nfChar );
+        this.txt = Align( this.txt, nfChar );
+        const metrics = ctx.measureText( "M" );
+        this.inc = new Point( Math.ceil( metrics.width ), 0 );
         this.render({
-            stringFrom: this.text[ 0 ],
-            stringTo: this.text[ 0 ],
+            stringFrom: this.txt[ 0 ],
+            stringTo: this.txt[ 0 ],
             offset: offset.clone(),
         });
         this.j = 0;
@@ -96,18 +103,18 @@ class Automat {
                     return;
                 }
                 this.render({
-                    stringFrom: this.text[ this.j ],
-                    stringTo: this.text[ --this.j ],
+                    stringFrom: this.txt[ this.j ],
+                    stringTo: this.txt[ --this.j ],
                     offset: offset.clone(),
                 });
             }
             if( e.key == "ArrowDown" ){
-                if( this.j == this.text.length - 1 ){
+                if( this.j == this.txt.length - 1 ){
                     return;
                 }
                 this.render({
-                    stringFrom: this.text[ this.j ],
-                    stringTo: this.text[ ++this.j ],
+                    stringFrom: this.txt[ this.j ],
+                    stringTo: this.txt[ ++this.j ],
                     offset: offset.clone(),
                 });
             }
@@ -136,11 +143,10 @@ class Automat {
     }
 }
 export { Automat };
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////-
 // DOTO: - ` ~ @ # $  
 //         ^ & { } [  
 //         ] / \ | _  
-//
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
