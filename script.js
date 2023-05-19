@@ -8,10 +8,9 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const text = ", but the goal is to be able to read like a \
-book or something.";
+    const text = "a M ' ! ,";
     const automat = new Automat({ 
-        font: "16px monospace", 
+        font: "200px monospace", 
         ctx: ctx,
         offset: new Point( 100, 160 ),
         nfFrames: 5,
@@ -19,7 +18,7 @@ book or something.";
         fgr: "#000",
         bgr: "#fff",
         text: text,
-        nfChar: 18,
+        nfChar: 1,
     });
 }
 ////////////////////////////////////////////////////////////////

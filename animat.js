@@ -1,10 +1,9 @@
 ////////////////////////////////////////////////////////////////
 import { monospace } from "./monospace.js";
+import { Charmat } from "./Charmat.js";
 ////////////////////////////////////////////////////////////////
 const X = 0;
 const Y = 1;
-const LOUNGE = 0;
-const ACTION = 1;
 ////////////////////////////////////////////////////////////////
 class Point extends Array {
     clone() {
@@ -180,117 +179,6 @@ class Gradient {
     }
 }
 ////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////[Charmat]
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-class Charmat {
-    constructor({ alphabet, 
-                  charFrom, 
-                  charTo, 
-                  offset, 
-                  nfFrames, 
-                  ctx, 
-                  delay,
-                  fgr,
-                  bgr,
-                  nfFramesGradient= 3,
-                  qq= 0.6,
-                }){
-        this.charFrom = charFrom;
-        this.charTo = charTo;
-        this.offset = offset;
-        this.nfFrames = nfFrames;
-        this.ctx = ctx;
-        this.delay = delay;
-        this.fgr = fgr;
-        this.bgr = bgr;
-        this.polygon = alphabet[ charFrom ]
-                       .clone()
-                       .translate( offset );
-        this.inc = alphabet[ charTo ]
-                   .clone()
-                   .translate( offset )
-                   .sub( this.polygon )
-                   .div( nfFrames );
-        ctx.font = alphabet.font;
-        const metricsFrom = ctx.measureText( charFrom );
-        const metricsTo = ctx.measureText( charTo );
-        const widthFrom = Math.ceil( metricsFrom.width );
-        const widthTo = Math.ceil( metricsTo.width );
-        const heightFrom = Math.ceil( metricsFrom.actualBoundingBoxDescent );
-        const heightTo = Math.ceil( metricsTo.actualBoundingBoxDescent );
-        this.width = Math.max( widthFrom, widthTo ) + 1;
-        this.height = Math.max( heightFrom, heightTo ) + 4;
-        // 56 is the width of 100px monospace
-        this.ctx.lineWidth = Math.min( 1, 1.0 * this.width / 56 );
-        // 0---->1---->2---->3---->4 ...
-        // 0                       1
-    }
-    async render() {
-        await this.RenderChar( this.charFrom, 0 );
-        await this.RenderPolygons( this.nfFrames );
-        await this.RenderChar( this.charTo, 0 );
-    }
-    clear(){
-        this.ctx.fillStyle = this.bgr;
-        this.ctx.fillRect( this.offset[ X ], 
-                           this.offset[ Y ], 
-                           this.width, 
-                           this.height ); 
-    }
-    fillChar( char, fillStyle ){
-        this.ctx.fillStyle = fillStyle;
-        this.ctx.fillText( char, 
-                           this.offset[ X ], 
-                           this.offset[ Y ]);
-    }
-    strokeChar( char ){
-        this.lineWidth += this.lineWidthInc;
-        this.ctx.lineWidth = this.lineWidth;
-        this.ctx.strokeText( char, 
-                             this.offset[ X ], 
-                             this.offset[ Y ]);
-     }
-    clckNext() {
-        this.polygon.add( this.inc );
-    }
-    RenderCharFrame( char, j ){
-        return new Promise( resolve => {
-            this.clear();
-            this.fillChar( char, this.fgr );
-            setTimeout(() => {
-                resolve( 'Ok' );
-            }, this.delay[ LOUNGE ]);
-        });
-    }
-    async RenderChar( char, j ){
-        if( j >= 1 ){ // vhitout Gradient's better
-            return;
-        }
-        await this.RenderCharFrame( char, j );
-        await this.RenderChar( char, j + 1 );
-    }
-    RenderPolygonFrame(){
-        return new Promise( resolve => {
-            this.clear();
-            this.polygon.createPath( this.ctx );
-            this.ctx.fillStyle = this.fgr;
-            this.ctx.stroke();
-            this.clckNext();
-            setTimeout(() => {
-                resolve( 'Ok' );
-            }, this.delay[ ACTION ]);
-        });
-    }
-    async RenderPolygons( j ){
-        if( j < 0 ){
-            return;
-        }
-        await this.RenderPolygonFrame();
-        await this.RenderPolygons( j - 1 );
-    }
-}
-////////////////////////////////////////////////////////////////
 function Split( str, nfChar ){
     const n = str.length;
     let lst = [];
@@ -397,12 +285,9 @@ class Automat {
         }
     }
 }
-export { Point, Automat };
+export { X, Y, Point, Automat };
 ////////////////////////////////////////////////////////////////
-// DOTO: - 0 1 2 3 4  DONE:  0 _ 2 3 4
-//         5 6 7 8 9         5 6 7 8 _
-//         . , ! ? -         . , ! _ -
-//         ; : ( ) '         ; : ( _ '
-//         " + = < >         " _ = < >
-//         %                 _
-// - Make separate files for charmat and automat. 
+// DOTO: - ` ~ @ # $  
+//         ^ & { } [  
+//         ] / \ | _  
+//
