@@ -8,7 +8,7 @@ const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
 if( 0 ){
 } else {
-    const txt = "Ch e c k T h u s";
+    const txt = "C ` 1 @ # 4 e $ k ~";
     const automat = new Automat({ 
         font: "200px monospace", 
         ctx: ctx,
