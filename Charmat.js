@@ -43,9 +43,8 @@ class Charmat {
         ctx.font = alphabet.font;
         const shapeFrom = GetCharShape( ctx, charFrom );
         const shapeTo = GetCharShape( ctx, charTo );
-        // Here 1, 4 are inserted by hand, to make sufficient cover.
-        this.width  = 1 + Math.max( shapeFrom[ X ], shapeTo[ X ]);
-        this.height = 4 + Math.max( shapeFrom[ Y ], shapeTo[ Y ]);
+        this.width  = Math.max( shapeFrom[ X ], shapeTo[ X ]);
+        this.height = Math.max( shapeFrom[ Y ], shapeTo[ Y ]);
         // 56 is the width of 100px monospace
         this.ctx.lineWidth = Math.min( 1, 1.0 * this.width / 56 );
     }
@@ -71,11 +70,19 @@ class Charmat {
         });
     }
     clear(){
-        this.ctx.fillStyle = this.bgr;
-        this.ctx.fillRect( this.offset[ X ], 
-                           this.offset[ Y ], 
-                           this.width, 
-                           this.height ); 
+        //this.ctx.fillStyle = this.bgr;
+        this.ctx.fillStyle = "#456";
+        // This character | is sticking out of the height
+        // for whatever reason, 20 should be some persentage of
+        // the height 10% or something.
+        // There's also problem with the _ characther, adhoc
+        // +1, +4 patches were removed from width and height,
+        // try figure what's going on here with differetn font
+        // sizes.
+        this.ctx.fillRect( this.offset[ X ] - 1,
+                           this.offset[ Y ] - 20, 
+                           this.width + 1, 
+                           this.height + 20); 
     }
     fillChar( char, fillStyle ){
         this.ctx.fillStyle = fillStyle;
