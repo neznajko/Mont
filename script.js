@@ -1,14 +1,18 @@
 ////////////////////////////////////////////////////////////////
 import { Automat } from "./Automat.js";
+import { Radar   } from "./Radar.js";
 ////////////////////////////////////////////////////////////////
 console.log( "Mont" );
 ////////////////////////////////////////////////////////////////
 const canvas = document.querySelector( "canvas" );
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 const ctx = canvas.getContext( "2d" );
 ////////////////////////////////////////////////////////////////
-if( 0 ){
+if( 1 ){
+    const radar = new Radar( ctx );
 } else {
-    const txt = "_ \\ a f ,a & a=] 4/| ^ k ~_";
+    const txt = "h a H a";
     const automat = new Automat({ 
         font: "200px monospace", 
         ctx: ctx,
