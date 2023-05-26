@@ -4,9 +4,9 @@ import { ChapterOne } from "./TheHobbit.js";
 class Radar {
     constructor( ctx ){
        const txt = ChapterOne[ "An Unexpected Party" ];
-        ctx.font = "40px monospace";
-        ctx.fillStyle = "#fff";
-        ctx.fillText( txt, 50, 50 );
+       ctx.font = "40px serif";
+       ctx.fillStyle = "#fff";
+       ctx.fillText( txt, 50, 50 );
     }
 }
 ////////////////////////////////////////////////////////////////
