@@ -7,10 +7,10 @@ const LOUNGE = 0,
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-function GetCharShape( ctx, char ){
-    const metrics = ctx.measureText( char );
+function GetStrShape( ctx, str ){
+    const metrics = ctx.measureText( str );
     const width = Math.ceil( metrics.width );
-    const height = Math.ceil( metrics.actualBoundingBoxDescent );
+    const height = Math.ceil( metrics.fontBoundingBoxDescent );
     return [ width, height ];
 }
 class Charmat {
@@ -41,8 +41,8 @@ class Charmat {
                    .sub( this.polygon )
                    .div( nfFrames );
         ctx.font = alphabet.font;
-        const shapeFrom = GetCharShape( ctx, charFrom );
-        const shapeTo = GetCharShape( ctx, charTo );
+        const shapeFrom = GetStrShape( ctx, charFrom );
+        const shapeTo = GetStrShape( ctx, charTo );
         this.width  = Math.max( shapeFrom[ X ], shapeTo[ X ]);
         this.height = Math.max( shapeFrom[ Y ], shapeTo[ Y ]);
         // 56 is the width of 100px monospace
@@ -75,7 +75,7 @@ class Charmat {
         // This character | is sticking out of the height
         // for whatever reason, 20 should be some persentage of
         // the height 10% or something.
-        // There's also problem with the _ characther, adhoc
+        // There's also problem with the _ characther, by hand
         // +1, +4 patches were removed from width and height,
         // try figure what's going on here with differetn font
         // sizes.
@@ -114,7 +114,7 @@ class Charmat {
     }
 }
 ////////////////////////////////////////////////////////////////
-export { Charmat };
+export { Charmat, GetStrShape };
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////

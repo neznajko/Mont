@@ -33,12 +33,14 @@ class Alphabet {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-function Split( str, nfChar ){
-    // str = str.trim().split( /\s+/ ).join( " " );
+function Split( str, nfChar, trim=false ){
+    if( trim ){
+        str = str.trim().split( /\s+/ ).join( " " );
+    }
     const n = str.length;
     let ls = [];
-    let i = 0;
-    let j = -1; // str.substring( i, j )
+    let i = 0,
+        j = 0; // str.substring[ i, j )
     for( let k = 0; k < n; ++k ){
         if( str[ k ] == ' ' ){
             j = k;
@@ -118,7 +120,7 @@ class Automat {
                     offset: offset.clone(),
                 });
             }
-        })
+        });
     }
 ////////////////////////////////////////////////////////////////
     render({ stringFrom, stringTo, offset }){
@@ -142,14 +144,12 @@ class Automat {
         }
     }
 }
-export { Automat };
+export { Automat, Split };
 ///////////////////////////////////////////////////////////////-
-// DOTO: ` ~ @ # $  DONE: ` ~ @ # $
-//       ^ & { } [        ^ & { } [ 
-//       ] / \ | _        ] / \ | _ 
-// - Add substitude if input char is not in the alphabet.
-// - Figure what to do next, b4 taking another font, preferably
-//   not mono space type of font.
+// DOTO: 
+// - Add a substitude if input char is not in the alphabet.
+// - Use StrShape from radar.
+// - Try to animate two lines.
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
