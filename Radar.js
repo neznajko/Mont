@@ -12,23 +12,65 @@ function StrShape( ctx, str ){
     return [ width, height ];
 }
 ////////////////////////////////////////////////////////////////
+class Layout {
+    constructor( ctx, width, height ){
+        this.ctx = ctx;
+        this.width = width;
+        this.height = height;
+        //
+        this.bgr = "#000";
+        this.fgr = "#fff";
+        this.origX = -1;
+        this.origY = -1;
+    }
+    Bgr( bgr ){
+        this.bgr = bgr;
+        return this;
+    }
+    Fgr( fgr ){
+        this.fgr = fgr;
+        return this;
+    }
+    Orig( orig ){
+        this.origX = orig[ X ];
+        this.origY = orig[ Y ];
+        return this;
+    }
+    GetOrigX(){
+        if( this.origX == -1 ){
+            this.origX = ( this.ctx.canvas.width - 
+                           this.width )/ 2; 
+        } 
+        return this.origX;
+    }
+    GetOrigY(){
+        if( this.origY == -1 ){
+            this.origY = ( this.ctx.canvas.height - 
+                           this.height )/ 2; 
+        }
+        return this.origY;
+    }
+}
+////////////////////////////////////////////////////////////////
 class Radar {
     constructor( ctx ){
-        ctx.font = "30px serif";
+        ctx.font = "28px serif";
         ctx.textBaseline = "top";
         this.ctx = ctx;
         const txt = ChapterOne[ "An Unexpected Party" ];
-        const pageLayout = {
-            width: 800,
-            height: 400,
-            orig: [ 90, 30 ],
-            bgr: "#558",
-            fgr: "#abf",
-        };
-        const chapter = this.CreatePages( txt, pageLayout.width, 
-            pageLayout.height );
+        const layout = new Layout( ctx, 650, 700 )
+                       .Bgr( "#444" )
+                       .Fgr( "#ddd")
+                       .Orig([ -1, 80 ]);
+        this.heightFactor = 1.2; // 
+        const [ _, h ] = StrShape( this.ctx, "M" );
+        this.gap = Math.floor( 0.2 * h );
+        console.log( this.gap, h );
+        const chapter = this.CreatePages
+        ( txt, layout.width, layout.height );
         this.pageNumber = 0;
-        this.ReadPage( pageLayout, chapter[ 0 ]);
+        this.ReadPage( layout, chapter[ 0 ]);
+        //
         window.addEventListener( "keydown", e => {
             if( e.key == "ArrowUp" ){
                 if( this.pageNumber == 0 ){
@@ -43,33 +85,20 @@ class Radar {
             } else {
                 return;
             }
-            this.ReadPage( pageLayout, chapter[ this.pageNumber ]);
+            this.ReadPage( layout, chapter[ this.pageNumber ]);
         });
     }
-    ReadPage( pageLayout, pageText ){
-        this.ctx.fillStyle = pageLayout.bgr;
-        this.ctx.fillRect( 
-            pageLayout.orig[ X ],
-            pageLayout.orig[ Y ], 
-            pageLayout.width, 
-            pageLayout.height );
-        let y = pageLayout.orig[ Y ];
-        this.ctx.fillStyle = pageLayout.fgr;
-        for( const line of pageText ){
-            const [ _, h ] = StrShape( this.ctx, line );
-            this.ctx.fillText( line, pageLayout.orig[ X ], y );
-            y += h;
-        }
-    }
+    ////////////////////////////////////////////////////////////
     CreatePages( txt, width, height ){
-        let y = 0;
+        let y = -this.gap;
         let book = [];
         let page = [];
         for( const p of txt ){
-            const ls = this.Split( p, width, true );
+            // Here -2 is added by hand for undercova
+            const ls = this.Split( p, width - 2, true );
             for( const line of ls ){
                 const [ _, h ] = StrShape( this.ctx, line );
-                y += h;
+                y += h + this.gap;
                 if( y <= height ){
                     page.push( line );
                 } else {
@@ -81,6 +110,24 @@ class Radar {
         }
         book.push( page );
         return book;
+    }
+    ////////////////////////////////////////////////////////////
+    ReadPage( layout, pageText ){
+        this.ctx.fillStyle = layout.bgr;
+        const x = layout.GetOrigX();
+        let y = layout.GetOrigY();
+        this.ctx.fillRect( x, y, 
+                           layout.width, 
+                           layout.height );
+        this.ctx.fillStyle = layout.fgr;
+        for( const line of pageText ){
+            this.ctx.fillStyle = "#555";
+            const [ w, h ] = StrShape( this.ctx, line );
+            this.ctx.fillRect( x, y, w, h );
+            this.ctx.fillStyle = layout.fgr;
+            this.ctx.fillText( line, x, y );
+            y += h + this.gap;
+        }
     }
     Split( str, width, trim=false ){
         if( trim ){
