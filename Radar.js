@@ -54,11 +54,11 @@ class Layout {
 ////////////////////////////////////////////////////////////////
 class Radar {
     constructor( ctx ){
-        ctx.font = "28px serif";
+        ctx.font = "18px serif";
         ctx.textBaseline = "top";
         this.ctx = ctx;
         const txt = ChapterOne[ "An Unexpected Party" ];
-        const layout = new Layout( ctx, 650, 700 )
+        const layout = new Layout( ctx, 750, 700 )
                        .Bgr( "#444" )
                        .Fgr( "#ddd")
                        .Orig([ -1, 80 ]);

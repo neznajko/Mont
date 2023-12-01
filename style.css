@@ -7,7 +7,7 @@ html, body {
 }
 canvas {
     display: block;
-    background-color: hsl( 0, 0%, 0%);
+    background-color: hsl( 0, 0%, 0% );
     position: absolute;
     left: 0;
     top: 0;
