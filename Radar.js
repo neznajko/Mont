@@ -1,7 +1,7 @@
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 import { ChapterOne } from "./TheHobbit.js";
 import { X, Y } from "./Polygon.js";
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 function StrShape( ctx, str ){
     const metrics = ctx.measureText( str );
     const width = Math.ceil( metrics.width );
@@ -11,7 +11,7 @@ function StrShape( ctx, str ){
     );
     return [ width, height ];
 }
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 class Layout {
     constructor( ctx, width, height ){
         this.ctx = ctx;
@@ -51,17 +51,17 @@ class Layout {
         return this.origY;
     }
 }
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 class Radar {
     constructor( ctx ){
-        ctx.font = "18px serif";
+        ctx.font = "20px serif";
         ctx.textBaseline = "top";
         this.ctx = ctx;
         const txt = ChapterOne[ "An Unexpected Party" ];
-        const layout = new Layout( ctx, 750, 700 )
-                       .Bgr( "#444" )
-                       .Fgr( "#ddd")
-                       .Orig([ -1, 80 ]);
+        const layout = new Layout( ctx, 680, 500 )
+                          .Bgr( "#442" )
+                          .Fgr( "#ffa")
+                          .Orig([ -1, -1 ]);
         this.heightFactor = 1.2; // 
         const [ _, h ] = StrShape( this.ctx, "M" );
         this.gap = Math.floor( 0.2 * h );
@@ -88,7 +88,7 @@ class Radar {
             this.ReadPage( layout, chapter[ this.pageNumber ]);
         });
     }
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
     CreatePages( txt, width, height ){
         let y = -this.gap;
         let book = [];
@@ -111,7 +111,7 @@ class Radar {
         book.push( page );
         return book;
     }
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
     ReadPage( layout, pageText ){
         this.ctx.fillStyle = layout.bgr;
         const x = layout.GetOrigX();
@@ -160,6 +160,10 @@ class Radar {
         return ls;
     }
 }
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 export { Radar };
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+// log: - rename Layout to PageLayout
+//      - comment that -1 orig means centering the page
+//      - read class Radar
+//      - FHINK

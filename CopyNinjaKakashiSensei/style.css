@@ -1,0 +1,25 @@
+html,body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    background-color: #22c;
+}
+div {
+    color: white;
+    display: inline-block;
+    font-size: 80px;
+    padding-left: 50px;
+}
+p {
+    padding: 0;
+    background-color: #228;
+}
+.canvas {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #44a;
+    opacity: 50%;
+}
