@@ -8,10 +8,12 @@ const canvas = document.querySelector( "canvas" );
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext( "2d" );
+const page = document.querySelector( ".page" );
 ///////////////////////////////////////////////////////////////
 if( 1 ){
-    const radar = new Radar( ctx );
+    page.style.display = "block";
 } else {
+    canvas.style.display = "block";
     const txt = "h a H a";
     const automat = new Automat({ 
         font: "200px monospace", 
@@ -47,3 +49,4 @@ if( 1 ){
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+// log: toggle page/canvas displays

@@ -4,16 +4,14 @@ html,body {
 }
 body {
     background-color: #22c;
+    padding-left: 150px;
 }
 div {
-    color: white;
+    color: #000;
     display: inline-block;
     font-size: 80px;
-    padding-left: 50px;
-}
-p {
-    padding: 0;
-    background-color: #228;
+    /*padding-left: 150px;*/
+    background-color: #555;
 }
 .canvas {
     display: none;
@@ -21,5 +19,5 @@ p {
     top: 0;
     left: 0;
     background-color: #44a;
-    opacity: 50%;
+    opacity: 75%;
 }

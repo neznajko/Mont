@@ -1,8 +1,9 @@
 //////////////////////////////////////////////////////////////
 console.log( "scrip4ing .." );
 //////////////////////////////////////////////////////////////
-const div = document.querySelector( "div" );
+const div = document.getElementsByClassName( "text-cont" )[0];
 const box = div.getBoundingClientRect();
+console.log( box );
 const canvas = document.querySelector( "canvas" );
 canvas.style.display = "block";
 canvas.width = box.width;
@@ -14,47 +15,11 @@ const div_style = getComputedStyle( div );
 const font_size = parseFloat( div_style.fontSize );
 const y = canvas.height - font_size;
 const ctx = canvas.getContext( "2d" );
-ctx.fillStyle = "#a20";
+ctx.fillStyle = "#fff";
 ctx.textBaseline = "top";
 ctx.font = div_style.getPropertyValue( "font" );
-ctx.fillText( "That's some text here.", 0, y );
+const text = div.textContent.trim();
+ctx.fillText( text, 0, y + 10 );
 //////////////////////////////////////////////////////////////
-// <!DOCTYPE html>
-// <html lang="en">
-// <head>
-//   <meta charset="UTF-8">
-//   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//   <title>Computed Text Position</title>
-//   <style>
-//     #myContainer {
-//       position: relative;
-//       left: 30px;      /* Set any desired left position */
-//     }
-// 
-//     #myText {
-//       font-family: Arial, sans-serif;
-//       font-size: 16px; /* Set the desired font size */
-//     }
-//   </style>
-// </head>
-// <body>
-// 
-// <div id="myContainer">
-//   <div id="myText">This is some text in the div.</div>
-// </div>
-// 
-// <script>
-//   document.addEventListener("DOMContentLoaded", function () {
-//     var myText = document.getElementById("myText");
-// 
-//     // Get the computed position and dimensions of the text container
-//     var rect = myText.getBoundingClientRect();
-// 
-//     console.log("Computed Left (within container):", rect.left);
-//     console.log("Computed Top (within container):", rect.top);
-//   });
-// </script>
-// 
-// </body>
-// </html>
-// 
+// log: - put text in a div
+//      - calculate x and y positions of its bounding box
