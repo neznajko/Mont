@@ -1,34 +1,22 @@
+:root {
+    --body-background-color: #111144;
+    --deck-color: #aaaabb;
+    --cruiser-color: #eeaabb;
+}
+* {
+    box-sizing: border-box;  
+}
 html,body {
     height: 100%;
     margin: 0;
 }
 body {
-    background-color: #fff;
+    background-color: var( --body-background-color );
 }
-.app {
-    margin: auto;
-    background-color: #f03;
-    height: 100%;
-    width: 70%;
-    display: none;
+.deck {
+    color: var( --deck-color );
 }
-.ocean-liner {
-    position: relative;
-    margin: auto;
-    background-color: #105;
-    height: 80%;
-    width: 80%;
-    top: 10%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.cruiser {
+    color: var( --cruiser-color );
 }
-.passenger {
-    color: #888;
-    font-family: monospace;
-    font-size: 24px;
-    background-color: #224;
-}
-#root{
-    color: #000;
-}
+/* Fin */

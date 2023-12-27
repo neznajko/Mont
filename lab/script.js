@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////
 console.log( "scrip4ing" );
 ////////////////////////////////////////////////////////////////
-// const ocean_liner = document.querySelector( ".ocean-liner" );
-////////////////////////////////////////////////////////////////
-const payload = [
+const THEHOBBIT = [
   "Vast expanses of salty blue waters stretch endlessly",
   "Waves crash, painting a rhythmic dance",
   "Mysteries lie deep, waiting to unveil",
@@ -14,47 +12,83 @@ const payload = [
   "Oceans connect, bridging distant lands"
 ];
 ////////////////////////////////////////////////////////////////
-// for( const baggage of payload ){ 
-//     const passenger = document.createElement( "div" );
-//     passenger.textContent = baggage;
-//     passenger.className = "passenger";
-//     ocean_liner.appendChild( passenger );
-// }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-class NumberDiv extends React.Component {
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+class Cruiser extends React.Component {
     constructor( props ){
         super( props );
-        // Initialize state with a number value of 0
         this.state = {
-            number: 0
-        };
-        // Bind the handleClick method to the component's context
-        this.handleClick = this.handleClick.bind( this );
+            level: 0,
+            log: props.log, // antipattern, but log won't change
+        }
     }
-    // Method to handle the click event
-    handleClick() {
-        // Update the state by incrementing the number value
-        this.setState( prevState => ({
-            number: prevState.number + 1
-        }));
+    onKeyDown = e => {
+        if( e.key == "ArrowUp" ){
+            this.setState({
+                level: this.state.level + 1,
+            });
+        } else
+        if( e.key == "ArrowDown" ){
+            this.setState({
+                level: this.state.level - 1,
+            });
+        }
+    }
+    componentDidMount() {
+        document.addEventListener
+                 ( 'keydown', this.onKeyDown );
+    }
+    componentWillUnmount() {
+        document.removeEventListener
+                 ( 'keydown', this.onKeyDown );
     }
     render() {
-        // Create a div element and assign an onClick event listener to it
-        const divElement = React.createElement(
-            'div',
-            { onClick: this.handleClick },
-            // Display the current number value within the div element
-            this.state.number
+        return (
+            <div className="cruiser">
+                { 
+                    this.state.log.map(( line, index ) => (
+                        <Deck key={ index } payload={ line } />
+                    ))
+                }
+            </div>
         );
-        // Return the created div element
-        return divElement;
     }
 }
-// Render the NumberDiv component to the root element in the DOM
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+class Deck extends React.Component {
+    constructor( props ){
+        super( props );
+        this.state = {
+            current_payload: props.payload
+        };
+    }
+    render() {
+        return (
+            <div className="deck">
+                { this.state.current_payload }
+            </div>
+        );
+    }
+}
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 ReactDOM.render(
-    React.createElement( NumberDiv ),
+    <React.StrictMode>
+        <Cruiser log={ THEHOBBIT } />
+    </React.StrictMode>,
     document.getElementById( 'root' )
 );
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+// log: in cruiser don't display the whole log define a number
+// of lines to disply, define Deck's content depending on the
+// current state level
