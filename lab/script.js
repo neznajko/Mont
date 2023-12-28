@@ -2,7 +2,7 @@
 console.log( "scrip4ing" );
 ////////////////////////////////////////////////////////////////
 const THEHOBBIT = [
-  "Vast expanses of salty blue waters stretch endlessly",
+  "Vast expanses of blue waters stretch endlessly",
   "Waves crash, painting a rhythmic dance",
   "Mysteries lie deep, waiting to unveil",
   "Sunsets reflect, shimmering golden hues",
@@ -16,6 +16,9 @@ const THEHOBBIT = [
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+function mod( n, m ){
+    return(( n % m ) + m ) % m;
+}
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -23,9 +26,10 @@ const THEHOBBIT = [
 class Cruiser extends React.Component {
     constructor( props ){
         super( props );
+        this.range = [ ...Array( props.size ).keys() ];
+        this.log = props.log;
         this.state = {
             level: 0,
-            log: props.log, // antipattern, but log won't change
         }
     }
     onKeyDown = e => {
@@ -49,13 +53,16 @@ class Cruiser extends React.Component {
                  ( 'keydown', this.onKeyDown );
     }
     render() {
+        const offset = this.state.level;
         return (
             <div className="cruiser">
-                { 
-                    this.state.log.map(( line, index ) => (
-                        <Deck key={ index } payload={ line } />
-                    ))
-                }
+            { 
+                this.range.map( j => {
+                    j = mod( j + offset, this.log.length );
+                    return <Deck key={ j } 
+                                 payload={ this.log[ j ]} />;
+                })
+            }
             </div>
         );
     }
@@ -81,7 +88,7 @@ class Deck extends React.Component {
 ////////////////////////////////////////////////////////////////
 ReactDOM.render(
     <React.StrictMode>
-        <Cruiser log={ THEHOBBIT } />
+        <Cruiser size={ 5 } log={ THEHOBBIT } />
     </React.StrictMode>,
     document.getElementById( 'root' )
 );
@@ -89,6 +96,4 @@ ReactDOM.render(
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-// log: in cruiser don't display the whole log define a number
-// of lines to disply, define Deck's content depending on the
-// current state level
+// log: - add copyNinjaKakashi class to the center deck
