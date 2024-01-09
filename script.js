@@ -10,7 +10,7 @@ canvas.width = window.innerWidth/2;
 canvas.height = window.innerHeight/1.2;
 const ctx = canvas.getContext( "2d" );
 ///////////////////////////////////////////////////////////////
-if( 1 ){
+if( 0 ){
     // test Charmat here
     const font = "200px monospace";
     ctx.font = font;

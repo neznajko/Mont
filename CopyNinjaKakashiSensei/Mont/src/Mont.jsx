@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 import React, { useEffect, useRef } from 'react';
 import { Charmat } from './Charmat';
-import { Alphabet } from './Automat';
+import { Alphabet, Automat } from './Automat';
 import { Point } from './Polygon';
 ////////////////////////////////////////////////////////////////
 class Toyota {
@@ -37,10 +37,26 @@ function Mont() {
         canvas = canvasRef.current;
         ctx = canvas.getContext( "2d" );
         canvas.addEventListener( 'click', handleClick );
+            const txt = "W a H | _ , f o ?";
+        const automat = new Automat({ 
+            font: "100px monospace", 
+            ctx: ctx,
+            offset: [ 50, 20 ],
+            nfFrames: 5,
+            delay: [ 100, 100 ], 
+            fgr: "#bbf",
+            bgr: "#494",
+            txt: txt,
+            nfChar: 1,
+        });
+       // window.addEventListener( 'keydown', onKeydown );
         return () => {
             canvas.removeEventListener( 'click', handleClick );
         };
     }, []);
+    const onKeydown = e => {
+        console.log( e.key );
+    }
     const handleClick = e => {
         const font = "200px monospace";
         ctx.font = font;
@@ -64,7 +80,7 @@ function Mont() {
     return (
         <canvas className="Mont"
             ref={ canvasRef }
-            width="250" height="400">
+            width="750" height="400">
         </canvas>
     );
 }
