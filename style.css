@@ -5,15 +5,12 @@ html, body {
     overflow: hidden;
     border: 0;
 }
-.fonts {
-    display: none;
+body {
+    background-color: #225;
+}
+.Mont {
     background-color: hsl( 0, 0%, 0% );
     position: absolute;
-    left: 0;
-    top: 0;
-}
-.page {
-    display: none;
-    background-color: hsl( 0, 40%, 5% );
-    height: 100%;
+    left: 120px;
+    top: 50px;
 }

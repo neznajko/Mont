@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////
-import { X, Y } from "./Polygon.js";
-import { StrShape } from "./Radar.js";
+import { X, Y } from "./Polygon.jsx";
+import { StrShape } from "./Radar.jsx";
 ////////////////////////////////////////////////////////////////
 const LOUNGE = 0,
       ACTION = 1;

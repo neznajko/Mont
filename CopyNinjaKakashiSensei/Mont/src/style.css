@@ -1,0 +1,9 @@
+:root {
+    --body-bg: hsl( 240, 40%, 20% );
+}
+body {
+    background-color: var( --body-bg );
+}
+.Mont {
+    background-color: black;
+}

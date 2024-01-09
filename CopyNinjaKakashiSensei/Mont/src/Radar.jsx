@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
-import { ChapterOne } from "./TheHobbit.js";
-import { X, Y } from "./Polygon.js";
+import { ChapterOne } from "./TheHobbit.jsx";
+import { X, Y } from "./Polygon.jsx";
 //////////////////////////////////////////////////////////////
 function StrShape( ctx, str ){
     const metrics = ctx.measureText( str );

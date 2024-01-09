@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
-import { monospace      } from "./monospace.js";
-import { Charmat        } from "./Charmat.js";
-import { Point, Polygon } from "./Polygon.js";
+import { monospace      } from "./monospace.jsx";
+import { Charmat        } from "./Charmat.jsx";
+import { Point, Polygon } from "./Polygon.jsx";
 ////////////////////////////////////////////////////////////////
 class Alphabet {
     static BaseFontsize = 100; // px
@@ -144,12 +144,8 @@ class Automat {
         }
     }
 }
-export { Alphabet, Automat, Split };
+export { Alphabet };
 ///////////////////////////////////////////////////////////////-
-// DOTO: 
-// - Add a substitude if input char is not in the alphabet.
-// - Use StrShape from radar.
-// - Try to animate two lines.
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
