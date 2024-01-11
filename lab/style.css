@@ -1,7 +1,8 @@
 :root {
-    --body-background-color: #111144;
-    --deck-color: #aaaabb;
-    --cruiser-color: #eeaabb;
+    --deck-bg-color-a: hsl( 240, 50%, 40% );
+    --deck-bg-color-b: hsl( 180, 80%, 20% );
+    --body-color: hsl( 15, 10%, 80% );
+    --body-bg-color: hsl( 220, 90%, 10% );
 }
 * {
     box-sizing: border-box;  
@@ -11,12 +12,14 @@ html,body {
     margin: 0;
 }
 body {
-    background-color: var( --body-background-color );
+    color: var( --body-color );
+    background-color: var( --body-bg-color );
 }
 .deck {
-    color: var( --deck-color );
+    background-color: var( --deck-bg-color-a );
 }
-.cruiser {
-    color: var( --cruiser-color );
+.alt-deck {
+    background-color: var( --deck-bg-color-b );
 }
+
 /* Fin */

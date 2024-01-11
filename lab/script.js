@@ -23,26 +23,48 @@ function mod( n, m ){
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-class Cruiser extends React.Component {
+class Deck extends React.Component {
     constructor( props ){
         super( props );
-        this.range = [ ...Array( props.size ).keys() ];
-        this.log = props.log;
+        this.className = props.className;
+    }
+    render() {
+        return ( 
+            <div className={ this.className }>
+                { this.props.payload }
+            </div>
+        );
+    }
+}
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+class Cruiser extends React.Component {
+   constructor( props ){
+        super( props );
         this.state = {
             level: 0,
         }
     }
-    onKeyDown = e => {
-        if( e.key == "ArrowUp" ){
-            this.setState({
-                level: this.state.level + 1,
-            });
-        } else
-        if( e.key == "ArrowDown" ){
-            this.setState({
-                level: this.state.level - 1,
-            });
+    getInc( key ){
+        if( key == "ArrowUp" ){
+            return 1;
         }
+        if( key == "ArrowDown" ){
+            return -1;
+        }
+        return 0;
+    }
+    onKeyDown = e => {
+        const inc = this.getInc( e.key );
+        if( inc ){
+            this.setState( state => {
+                return {
+                    level: state.level + inc,
+                };
+            });
+        } 
     }
     componentDidMount() {
         document.addEventListener
@@ -52,43 +74,33 @@ class Cruiser extends React.Component {
         document.removeEventListener
                  ( 'keydown', this.onKeyDown );
     }
+    className( j ){
+        if( j == Math.floor( this.props.siz / 2 )){
+            return "alt-deck";
+        }
+        return "deck";
+    }
+    payload( j ){
+        j = mod( j + this.state.level, this.props.logbook.length );
+        return this.props.logbook[ j ];
+    }
     render() {
-        const offset = this.state.level;
-        return (
-            <div className="cruiser">
-            { 
-                this.range.map( j => {
-                    j = mod( j + offset, this.log.length );
-                    return <Deck key={ j } 
-                                 payload={ this.log[ j ]} />;
-                })
-            }
-            </div>
+        return ( 
+            [ ...Array( this.props.siz ).keys() ].map( j => {
+                return <Deck key={ j }
+                             className={ this.className( j )} 
+                             payload={ this.payload( j )} />
+            })
         );
     }
 }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-class Deck extends React.Component {
-    constructor( props ){
-        super( props );
-        this.state = {
-            current_payload: props.payload
-        };
-    }
-    render() {
-        return (
-            <div className="deck">
-                { this.state.current_payload }
-            </div>
-        );
-    }
-}
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ReactDOM.render(
     <React.StrictMode>
-        <Cruiser size={ 5 } log={ THEHOBBIT } />
+        <Cruiser siz={ 5 } logbook={ THEHOBBIT } />
     </React.StrictMode>,
     document.getElementById( 'root' )
 );
@@ -96,4 +108,3 @@ ReactDOM.render(
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-// log: - add copyNinjaKakashi class to the center deck

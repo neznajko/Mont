@@ -37,7 +37,7 @@ function Mont() {
         canvas = canvasRef.current;
         ctx = canvas.getContext( "2d" );
         canvas.addEventListener( 'click', handleClick );
-            const txt = "W a H | _ , f o ?";
+        const txt = "W a H | _ , f o ?";
         const automat = new Automat({ 
             font: "100px monospace", 
             ctx: ctx,
