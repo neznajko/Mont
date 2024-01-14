@@ -6,18 +6,16 @@ body {
     background-color: #22c;
     padding-left: 150px;
 }
-div {
+.text-cont {
     color: #000;
     display: inline-block;
-    font-size: 80px;
-    /*padding-left: 150px;*/
+    font-size: 60px;
     background-color: #555;
 }
 .canvas {
-    display: none;
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #44a;
-    opacity: 75%;
+    background-color: #228;
+    opacity: 85%;
 }

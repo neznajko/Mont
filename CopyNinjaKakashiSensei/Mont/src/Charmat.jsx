@@ -10,10 +10,10 @@ const LOUNGE = 0,
 ////////////////////////////////////////////////////////////////
 class Charmat {
     constructor({ alphabet, 
-                  charFrom, 
-                  charTo, 
+                  charFrom,
+                  charTo,
                   offset, // Point
-                  nfFrames, 
+                  nfFrames,
                   ctx, 
                   delay,
                   fgr,

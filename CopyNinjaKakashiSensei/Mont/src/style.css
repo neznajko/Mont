@@ -1,9 +1,30 @@
 :root {
-    --body-bg: hsl( 240, 40%, 20% );
+    --deck-bg-color-a: hsl( 240, 50%, 40% );
+    --deck-bg-color-b: hsl( 180, 80%, 20% );
+    --body-color: hsl( 15, 10%, 80% );
+    --body-bg-color: hsl( 240, 40%, 20% );
+}
+* {
+    box-sizing: border-box;  
+}
+html,body {
+    height: 100%;
+    margin: 0;
 }
 body {
-    background-color: var( --body-bg );
+    overflow: hidden;
+    color: var( --body-color );
+    background-color: var( --body-bg-color );
 }
 .Mont {
-    background-color: black;
+    position: relative;
+    top: 20px;
+    left: 150px;
 }
+.deck {
+    background-color: var( --deck-bg-color-a );
+}
+.CopyNinjaKakashi {
+    background-color: var( --deck-bg-color-b );
+}
+/* Fin */

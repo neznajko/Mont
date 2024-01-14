@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
-import { monospace      } from "./monospace.jsx";
-import { Charmat        } from "./Charmat.jsx";
-import { Point, Polygon } from "./Polygon.jsx";
+import { monospace      } from "./monospace";
+import { Charmat        } from "./Charmat";
+import { Point, Polygon } from "./Polygon";
 ////////////////////////////////////////////////////////////////
 class Alphabet {
     static BaseFontsize = 100; // px
@@ -33,38 +33,9 @@ class Alphabet {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-function Split( str, nfChar, trim=false ){
-    if( trim ){
-        str = str.trim().split( /\s+/ ).join( " " );
-    }
-    const n = str.length;
-    let ls = [];
-    let i = 0,
-        j = 0; // str.substring[ i, j )
-    for( let k = 0; k < n; ++k ){
-        if( str[ k ] == ' ' ){
-            j = k;
-        }   
-        if( k - i >= nfChar ){
-            ls.push( str.substring( i, j ));
-            i = j + 1;
-        }
-    }
-    if( i < n ){
-        ls.push( str.substring( i ));
-    }
-    return ls;
-}
-///////////////////////////////////////////////////////////////
-function Align( ls, nfChar ){
-    return ls.map( s => s + ' '.repeat( nfChar - s.length ));
-}
-//////////////////////////////////////////////////////////-/`=_
-// Return the maximum length word in txt.
-function MaxLenWord( txt ){
-    return Math.max( ...txt.split( /\s+/ ).map( w => w.length ));
-}
-//////////////////////////////////////////////////////////////_
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 class Automat {
     constructor({ font, 
                   ctx,
@@ -72,67 +43,71 @@ class Automat {
                   nfFrames,
                   delay,      
                   fgr, 
-                  bgr, 
-                  txt, 
-                  nfChar }){
+                  bgr,
+                }){
         ctx.font = font;
         ctx.textBaseline = "top";
         ctx.strokeStyle = fgr;
         ctx.fillStyle = bgr;
-        ctx.fillRect( 0, 0, 
-                      ctx.canvas.width,
-                      ctx.canvas.height );
         this.ctx = ctx;
-        offset = Point.from( offset );
+        this.offset = Point.from( offset );
         this.nfFrames = nfFrames;
         this.delay = delay;
         this.fgr = fgr;
         this.bgr = bgr;
-        nfChar = Math.max( MaxLenWord( txt ), nfChar );
-        this.txt = Split( txt, nfChar );
-        this.txt = Align( this.txt, nfChar );
         const metrics = ctx.measureText( "M" );
         this.inc = new Point( Math.ceil( metrics.width ), 0 );
-        this.render({
-            stringFrom: this.txt[ 0 ],
-            stringTo: this.txt[ 0 ],
-            offset: offset.clone(),
-        });
-        this.j = 0;
+        this.alphabet = Alphabet.getAlphabet( font );
+        this.copyNinja = document.querySelector( ".CopyNinjaKakashi" );
+        const chakura = this.copyNinja.innerText;
+        this.align( chakura, chakura );
+        this.irender();
+        this.onkeydown();
+    }
+    ////////////////////////////////////////////////////////////
+    align( stringFrom, stringTo ) {
+        this.stringFrom = stringFrom;
+        this.stringTo = stringTo;
+        const f = this.stringFrom.length;
+        const t = this.stringTo.length;
+        const m = Math.max( f, t );
+        this.stringFrom += ' '.repeat( m - f );
+        this.stringTo += ' '.repeat( m - t );
+    }
+    ////////////////////////////////////////////////////////////
+    onkeydown(){
         window.addEventListener( "keydown", e => {
-            if( e.key == "ArrowUp" ){
-                if( this.j == 0 ){
-                    return;
-                }
+            if( e.key == "ArrowUp" || e.key == "ArrowDown" ){
+                const chakura = this.copyNinja.innerText;
+                this.align( this.stringTo, chakura );           
                 this.render({
-                    stringFrom: this.txt[ this.j ],
-                    stringTo: this.txt[ --this.j ],
-                    offset: offset.clone(),
-                });
-            }
-            if( e.key == "ArrowDown" ){
-                if( this.j == this.txt.length - 1 ){
-                    return;
-                }
-                this.render({
-                    stringFrom: this.txt[ this.j ],
-                    stringTo: this.txt[ ++this.j ],
-                    offset: offset.clone(),
+                    stringFrom: this.stringFrom,
+                    stringTo: this.stringTo,
+                    offset: this.offset.clone(),
                 });
             }
         });
     }
-////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    irender(){ // initial render
+        this.ctx.fillRect( 0, 0, this.ctx.canvas.width,
+                                 this.ctx.canvas.height );
+        this.render({
+            stringFrom: this.stringFrom,
+            stringTo: this.stringFrom,
+            offset: this.offset.clone(),
+        });
+    }
+    ////////////////////////////////////////////////////////////
     render({ stringFrom, stringTo, offset }){
-        const alphabet = Alphabet.getAlphabet( this.ctx.font );
         for( let j = 0, n = stringFrom.length; j < n; j++ ){
             const charFrom = stringFrom[ j ];
             const charTo = stringTo[ j ];
-            const charmat = new Charmat({ 
-                "alphabet": alphabet, 
-                "charFrom": charFrom, 
-                "charTo": charTo, 
-                "offset": offset.clone(), 
+            const charmat = new Charmat({
+                "alphabet": this.alphabet,
+                "charFrom": charFrom,
+                "charTo": charTo,
+                "offset": offset.clone(),
                 "nfFrames": charFrom == charTo ? -1 : this.nfFrames,
                 "ctx": this.ctx,
                 "delay": charFrom == charTo ? [ -1, -1 ] : this.delay,
@@ -150,3 +125,4 @@ export { Alphabet, Automat };
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+// log:
