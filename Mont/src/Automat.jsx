@@ -44,6 +44,7 @@ class Automat {
                   delay,      
                   fgr, 
                   bgr,
+                  chakura,
                 }){
         this.ctx = ctx;
         this.offset = Point.from( offset );
@@ -51,29 +52,19 @@ class Automat {
         this.delay = delay;
         this.fgr = fgr;
         this.bgr = bgr;
+        this.chakura = chakura; // aka chatora
         //
         this.ctx.font = font;
         this.ctx.textBaseline = "top";
         this.ctx.strokeStyle = this.fgr;
         this.ctx.fillStyle = this.bgr;
-        //
-        this.copyNinja = this.CopyNinjaKakashiSensei();
-        this.alphabet = Alphabet.getAlphabet( ctx.font );
-        const chakura = this.copyNinja.innerText;
-        this.align( chakura, chakura ); // aka chatora
-        this.irender();
-        this.onkeydown();
+        this.ctx.fillRect( 0, 0, this.ctx.canvas.width,
+                                 this.ctx.canvas.height );
+        this.alphabet = Alphabet.getAlphabet( this.ctx.font );
+        this.setStrings( this.chakura, this.chakura );
     }
     ////////////////////////////////////////////////////////////
-    CopyNinjaKakashiSensei() {
-        const copyNinja = document.querySelector( ".CopyNinjaKakashi" );
-        const style = getComputedStyle( copyNinja );
-        //this.ctx.font = style.getPropertyValue( "font" );
-    ////////////////////////////////////////////////////////////
-        return copyNinja;
-    }
-    ////////////////////////////////////////////////////////////
-    align( stringFrom, stringTo ) {
+    setStrings( stringFrom, stringTo ) {
         this.stringFrom = stringFrom;
         this.stringTo = stringTo;
         const f = this.stringFrom.length;
@@ -81,28 +72,9 @@ class Automat {
         const m = Math.max( f, t );
         this.stringFrom += ' '.repeat( m - f );
         this.stringTo += ' '.repeat( m - t );
-    }
-    ////////////////////////////////////////////////////////////
-    onkeydown(){
-        window.addEventListener( "keydown", e => {
-            if( e.key == "ArrowUp" || e.key == "ArrowDown" ){
-                const chakura = this.copyNinja.innerText;
-                this.align( this.stringTo, chakura );
-                this.render({
-                    stringFrom: this.stringFrom,
-                    stringTo: this.stringTo,
-                    offset: this.offset.clone(),
-                });
-            }
-        });
-    }
-    ////////////////////////////////////////////////////////////
-    irender(){ // initial render
-        this.ctx.fillRect( 0, 0, this.ctx.canvas.width,
-                                 this.ctx.canvas.height );
         this.render({
             stringFrom: this.stringFrom,
-            stringTo: this.stringFrom,
+            stringTo: this.stringTo,
             offset: this.offset.clone(),
         });
     }

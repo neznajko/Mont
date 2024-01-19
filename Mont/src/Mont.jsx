@@ -13,7 +13,7 @@ function CopyNinjaKakashiSensei( ctx, copySelector ){
     canvas.height = box.height;
     canvas.style.left = box.x + "px";
     canvas.style.top = box.y + "px";
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
     const style = getComputedStyle( copyNinja );
     const offsetY = box.height - parseInt( style.fontSize );
     return {
@@ -22,16 +22,26 @@ function CopyNinjaKakashiSensei( ctx, copySelector ){
         color:           style.color,
         backgroundColor: style.backgroundColor,
         offsetY:         offsetY,
+        ninja:           copyNinja,
     };
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 }
 ////////////////////////////////////////////////////////////////
 function Mont( props ) {
     const canvasRef = useRef( null );
+    var ninja;
+    var chakura;
+    var automat;
+    const onKeyDown = e => {
+        automat.setStrings( chakura, ninja.innerText );
+        chakura = ninja.innerText;
+    };
     useLayoutEffect(() => {
         const ctx = canvasRef.current.getContext( "2d" );
         const copy = CopyNinjaKakashiSensei( ctx, props.copySelector );
-        const automat = new Automat({ 
+        ninja = copy.ninja;
+        chakura = ninja.innerText;
+        automat = new Automat({ 
             font: copy.font,
             ctx: ctx, 
             offset: [ 0, copy.offsetY ],
@@ -39,9 +49,15 @@ function Mont( props ) {
             delay: [ 100, 100 ], 
             fgr: copy.color,
             bgr: copy.backgroundColor,
+            chakura: chakura,
         });
+        window.addEventListener( 'keydown', onKeyDown );
+        return () => {
+            window.removeEventListener( 'keydown', onKeyDown );
+        };
     },[ props.copySelector ]);
     ////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
     return (
         <canvas className="Mont"
                 ref={ canvasRef }
@@ -53,4 +69,4 @@ function Mont( props ) {
 ////////////////////////////////////////////////////////////////
 export { Mont }
 ////////////////////////////////////////////////////////////////
-// log: move copy ninja kakashi here
+// log:
