@@ -18,6 +18,6 @@ const text = div.textContent.trim();
 ctx.font = div_style.getPropertyValue( "font" );
 ctx.fillStyle = "#f00";
 ctx.textBaseline = "top";
-ctx.fillText( text, 0, y );
+ctx.fillText( text, 0, y + 10 );
 //////////////////////////////////////////////////////////////
 // log:

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
-import { monospace      } from "./monospace";
-import { Charmat        } from "./Charmat";
-import { Point, Polygon } from "./Polygon";
+import { monospace      } from "./monospace"
+import { Charmat        } from "./Charmat"
+import { Point, Polygon } from "./Polygon"
 ////////////////////////////////////////////////////////////////
 class Alphabet {
     static BaseFontsize = 100; // px
@@ -45,24 +45,32 @@ class Automat {
                   fgr, 
                   bgr,
                 }){
-        ctx.font = font;
-        ctx.textBaseline = "top";
-        ctx.strokeStyle = fgr;
-        ctx.fillStyle = bgr;
         this.ctx = ctx;
         this.offset = Point.from( offset );
         this.nfFrames = nfFrames;
         this.delay = delay;
         this.fgr = fgr;
         this.bgr = bgr;
-        const metrics = ctx.measureText( "M" );
-        this.inc = new Point( Math.ceil( metrics.width ), 0 );
-        this.alphabet = Alphabet.getAlphabet( font );
-        this.copyNinja = document.querySelector( ".CopyNinjaKakashi" );
+        //
+        this.ctx.font = font;
+        this.ctx.textBaseline = "top";
+        this.ctx.strokeStyle = this.fgr;
+        this.ctx.fillStyle = this.bgr;
+        //
+        this.copyNinja = this.CopyNinjaKakashiSensei();
+        this.alphabet = Alphabet.getAlphabet( ctx.font );
         const chakura = this.copyNinja.innerText;
-        this.align( chakura, chakura );
+        this.align( chakura, chakura ); // aka chatora
         this.irender();
         this.onkeydown();
+    }
+    ////////////////////////////////////////////////////////////
+    CopyNinjaKakashiSensei() {
+        const copyNinja = document.querySelector( ".CopyNinjaKakashi" );
+        const style = getComputedStyle( copyNinja );
+        //this.ctx.font = style.getPropertyValue( "font" );
+    ////////////////////////////////////////////////////////////
+        return copyNinja;
     }
     ////////////////////////////////////////////////////////////
     align( stringFrom, stringTo ) {
@@ -79,7 +87,7 @@ class Automat {
         window.addEventListener( "keydown", e => {
             if( e.key == "ArrowUp" || e.key == "ArrowDown" ){
                 const chakura = this.copyNinja.innerText;
-                this.align( this.stringTo, chakura );           
+                this.align( this.stringTo, chakura );
                 this.render({
                     stringFrom: this.stringFrom,
                     stringTo: this.stringTo,
@@ -115,11 +123,13 @@ class Automat {
                 "bgr": this.bgr,
             });
             charmat.render();
-            offset.add( this.inc );
+            const substr = stringTo.substring( 0, j + 1 );
+            const width = this.ctx.measureText( substr ).width; 
+            offset[0] = width;
         }
     }
 }
-export { Alphabet, Automat };
+export { Alphabet, Automat }
 ///////////////////////////////////////////////////////////////-
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////

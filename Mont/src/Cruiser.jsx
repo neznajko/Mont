@@ -81,7 +81,7 @@ class Cruiser extends React.Component {
                              className={ this.className( j )} 
                              payload={ this.payload( j )} />
             })}
-            <Mont />
+            <Mont copySelector=".CopyNinjaKakashi" />
             </>
         );
     }
