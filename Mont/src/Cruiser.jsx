@@ -17,11 +17,10 @@ function mod( n, m ){
 class Deck extends React.Component {
     constructor( props ){
         super( props );
-        this.className = props.className;
     }
     render() {
         return ( 
-            <div className={ this.className }>
+            <div className={ this.props.className }>
                 { this.props.payload }
             </div>
         );
@@ -76,14 +75,14 @@ class Cruiser extends React.Component {
     render() {
         return ( 
             <>
-            <div className="Cruiser">
+	    <div class="cruiser">
             {[ ...Array( this.props.siz ).keys() ].map( j => {
                 return <Deck key={ j }
                              className={ this.className( j )} 
                              payload={ this.payload( j )} />
             })}
             <Mont copySelector=".CopyNinjaKakashi" />
-            </div>
+	    </div>
             </>
         );
     }

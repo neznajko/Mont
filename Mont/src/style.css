@@ -1,8 +1,8 @@
 :root {
+    --root-fgr: hsl(  15, 10%, 80% );
+    --root-bgr: hsl( 240, 40%, 20% );
     --deck-bg-color-a: hsl( 240, 50%, 40% );
     --deck-bg-color-b: hsl( 180, 80%, 20% );
-    --body-color: hsl( 15, 10%, 80% );
-    --body-bg-color: hsl( 240, 40%, 20% );
 }
 * {
     box-sizing: border-box;
@@ -13,10 +13,17 @@ html,body {
 }
 body {
     overflow: hidden;
-    color: var( --body-color );
-    background-color: var( --body-bg-color );
 }
-.Cruiser {
+#root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var( --root-fgr );
+    background-color: var( --root-bgr );
+}
+.cruiser {
+    height: 80%;
     background-color: #00f;
 }
 .Mont {
@@ -26,7 +33,7 @@ body {
     background-color: var( --deck-bg-color-a );
 }
 .CopyNinjaKakashi {
-    background-color: var( --deck-bg-color-a );
+    background-color: var( --deck-bg-color-b );
 }
 .deck,.CopyNinjaKakashi {
     width: 800px;
