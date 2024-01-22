@@ -41,10 +41,10 @@ class Cruiser extends React.Component {
     }
     getInc( key ){
         if( key == "ArrowUp" ){
-            return 1;
+            return -1;
         }
         if( key == "ArrowDown" ){
-            return -1;
+            return +1;
         }
         return 0;
     }
@@ -76,12 +76,14 @@ class Cruiser extends React.Component {
     render() {
         return ( 
             <>
+            <div className="Cruiser">
             {[ ...Array( this.props.siz ).keys() ].map( j => {
                 return <Deck key={ j }
                              className={ this.className( j )} 
                              payload={ this.payload( j )} />
             })}
             <Mont copySelector=".CopyNinjaKakashi" />
+            </div>
             </>
         );
     }

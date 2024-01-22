@@ -16,6 +16,9 @@ body {
     color: var( --body-color );
     background-color: var( --body-bg-color );
 }
+.Cruiser {
+    background-color: #00f;
+}
 .Mont {
     position: absolute;
 }
