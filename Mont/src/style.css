@@ -1,6 +1,6 @@
 :root {
-    --root-fgr: hsl(  15, 10%, 80% );
-    --root-bgr: hsl( 240, 40%, 20% );
+    --root-fgr:        hsl(  15, 10%, 80% );
+    --root-bgr:        hsl( 240, 40%, 20% );
     --deck-bg-color-a: hsl( 240, 50%, 40% );
     --deck-bg-color-b: hsl( 180, 80%, 20% );
 }
@@ -22,9 +22,11 @@ body {
     color: var( --root-fgr );
     background-color: var( --root-bgr );
 }
-.cruiser {
+#cruiser {
+    width: 60%;
     height: 80%;
     background-color: #00f;
+    font: 22px monospace;
 }
 .Mont {
     position: absolute;
@@ -34,10 +36,5 @@ body {
 }
 .CopyNinjaKakashi {
     background-color: var( --deck-bg-color-b );
-}
-.deck,.CopyNinjaKakashi {
-    width: 800px;
-    font: 22px monospace;
-    vertical-align: text-top;
 }
 /* Fin */

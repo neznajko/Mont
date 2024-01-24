@@ -1,9 +1,8 @@
 :root {
-    --deck-bg-color:    hsl( 240, 50%, 40% );
-    --body-color:       hsl(  15, 10%, 80% );
-    --body-bg-color:    hsl( 120, 90%, 50% );
-    --root-bg-color:    hsl( 220, 90%, 20% );
-    --cruiser-bg-color: hsl( 300, 60%, 10% )
+    --deck-bgr:    hsl( 240, 50%, 40% );
+    --root-fgr:    hsl(   0, 20%, 80% );
+    --root-bgr:    hsl( 220, 90%, 20% );
+    --cruiser-bgr: hsl( 240, 60%, 10% )
 }
 * {
     box-sizing: border-box;  
@@ -12,29 +11,22 @@ html,body {
     height: 100%;
     margin: 0;
 }
-body {
-    width: 100%;
-    color: var( --body-color );
-    background-color: var( --body-bg-color );
-    font: 20px monospace;
-}
 #root {
     height: 100%;
-    width: 800px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    background-color: var( --root-bg-color );
+    color: var( --root-fgr );
+    background-color: var( --root-bgr );
+    font: 22px monospace;    
 }
-.Cruiser {
+#cruiser {
     height: 80%;
-    width: 75%;
-    background-color: var( --cruiser-bg-color );
-    display: flex;
-    justify-content: center;
+    width: 60%;
+    background-color: var( --cruiser-bgr );
 }
 .deck {
-    width: 80%;
-    text-align-last: justify;
-    background-color: var( --deck-bg-color );
+    display: inline-block;
+    background-color: var( --deck-bgr );
 }
 /* Fin */

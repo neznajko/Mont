@@ -11,7 +11,6 @@ function CopyNinjaKakashiSensei( ctx, copySelector ){
     const canvas = ctx.canvas;
     canvas.width = box.width;
     canvas.height = box.height;
-    console.log( box );
     canvas.style.left = box.x + "px";
     canvas.style.top = box.y + "px";
 ////////////////////////////////////////////////////////////////

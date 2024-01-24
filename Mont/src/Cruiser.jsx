@@ -32,11 +32,14 @@ class Deck extends React.Component {
 ////////////////////////////////////////////////////////////////
 class Cruiser extends React.Component {
    constructor( props ){
-        super( props );
-        this.state = {
-            level: 0,
-        }
-        this.copypos = Math.floor( this.props.siz / 2 );
+       super( props );
+       this.state = {
+           level: 0,
+       }
+       this.copypos = Math.floor( this.props.siz / 2 );
+       const cruiser = document.getElementById( "cruiser" );
+       this.box = cruiser.getBoundingClientRect();
+       console.log( this.box );
     }
     getInc( key ){
         if( key == "ArrowUp" ){
@@ -58,6 +61,8 @@ class Cruiser extends React.Component {
         } 
     }
     componentDidMount() {
+        //
+        //
         document.addEventListener
                  ( 'keydown', this.onKeyDown );
     }
@@ -75,14 +80,12 @@ class Cruiser extends React.Component {
     render() {
         return ( 
             <>
-	    <div class="cruiser">
             {[ ...Array( this.props.siz ).keys() ].map( j => {
                 return <Deck key={ j }
                              className={ this.className( j )} 
                              payload={ this.payload( j )} />
             })}
             <Mont copySelector=".CopyNinjaKakashi" />
-	    </div>
             </>
         );
     }

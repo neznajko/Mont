@@ -24,7 +24,7 @@ const LOGBOOK = [
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-ReactDOM.createRoot( document.getElementById( 'root' ))
+ReactDOM.createRoot( document.getElementById( 'cruiser' ))
         .render( <React.StrictMode> 
                    <Cruiser siz={ 7 }
                             logbook={ LOGBOOK } />
