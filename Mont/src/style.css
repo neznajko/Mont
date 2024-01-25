@@ -31,7 +31,12 @@ body {
 .Mont {
     position: absolute;
 }
+/**************************************************************/
 .deck {
+    /* This is used from Publisher class, after measurments are
+       done it can be set to block if necessary.
+     */
+    display: inline-block;
     background-color: var( --deck-bg-color-a );
 }
 .CopyNinjaKakashi {
