@@ -34,12 +34,11 @@ class Cruiser extends React.Component {
    constructor( props ){
        super( props );
        this.state = {
-           level: 0,
+           page_number: 0,
        }
-       this.copypos = Math.floor( this.props.siz / 2 );
-       const cruiser = document.getElementById( "cruiser" );
-       this.box = cruiser.getBoundingClientRect();
-       console.log( this.box );
+       const logbook = this.props.logbook
+       this.nof_pages = logbook.length;
+       this.siz = logbook[ 0 ].length;
     }
     getInc( key ){
         if( key == "ArrowUp" ){
@@ -54,33 +53,35 @@ class Cruiser extends React.Component {
         const inc = this.getInc( e.key );
         if( inc ){
             this.setState( state => {
+                const n = state.page_number + inc;
+                const m = this.nof_pages;
                 return {
-                    level: state.level + inc,
+                    page_number: mod( n, m ),
                 };
             });
         } 
     }
+////////////////////////////////////////////////////////////////
     componentDidMount() {
-        //
-        //
-        document.addEventListener
-                 ( 'keydown', this.onKeyDown );
+        document.addEventListener( 'keydown', this.onKeyDown );
     }
     componentWillUnmount() {
-        document.removeEventListener
-                 ( 'keydown', this.onKeyDown );
+        document.removeEventListener( 'keydown', this.onKeyDown );
     }
-    className( j ){
-        return j == this.copypos ? "CopyNinjaKakashi" : "deck";
+    className( j ){ // to be modified
+        return j == 0 ? "CopyNinjaKakashi" : "deck";
+    }
+    getCurrentPage() {
+        return this.props.logbook[ this.state.page_number ];
     }
     payload( j ){
-        j = mod( j + this.state.level, this.props.logbook.length );
-        return this.props.logbook[ j ];
+        const page = this.getCurrentPage();
+        return ( j < page.length ) ? page[ j ] : "";
     }
     render() {
         return ( 
             <>
-            {[ ...Array( this.props.siz ).keys() ].map( j => {
+            {[ ...Array( this.siz ).keys() ].map( j => {
                 return <Deck key={ j }
                              className={ this.className( j )} 
                              payload={ this.payload( j )} />
