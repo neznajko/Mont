@@ -19,10 +19,14 @@ class Deck extends React.Component {
         super( props );
     }
     render() {
-        return ( 
-            <div className={ this.props.className }>
+        return (
+            <>
+            <div id={ this.props.id }
+                 className="deck">
                 { this.props.payload }
             </div>
+            <Mont copySelector={ this.props.id } />
+            </>
         );
     }
 }
@@ -66,10 +70,8 @@ class Cruiser extends React.Component {
         document.addEventListener( 'keydown', this.onKeyDown );
     }
     componentWillUnmount() {
-        document.removeEventListener( 'keydown', this.onKeyDown );
-    }
-    className( j ){ // to be modified
-        return j == 0 ? "CopyNinjaKakashi" : "deck";
+        document.removeEventListener( 'keydown',
+                                      this.onKeyDown );
     }
     getCurrentPage() {
         return this.props.logbook[ this.state.page_number ];
@@ -80,14 +82,11 @@ class Cruiser extends React.Component {
     }
     render() {
         return ( 
-            <>
-            {[ ...Array( this.siz ).keys() ].map( j => {
+            [ ...Array( this.siz ).keys() ].map( j => {
                 return <Deck key={ j }
-                             className={ this.className( j )} 
+                             id={ j }
                              payload={ this.payload( j )} />
-            })}
-            <Mont copySelector=".CopyNinjaKakashi" />
-            </>
+            })
         );
     }
 }

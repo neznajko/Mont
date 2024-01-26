@@ -6,7 +6,7 @@ import { Automat } from './Automat'
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 function CopyNinjaKakashiSensei( ctx, copySelector ){
-    const copyNinja = document.querySelector( copySelector );
+    const copyNinja = document.getElementById( copySelector );
     const box = copyNinja.getBoundingClientRect();
     const canvas = ctx.canvas;
     canvas.width = box.width;
@@ -38,7 +38,8 @@ function Mont( props ) {
     };
     useLayoutEffect(() => {
         const ctx = canvasRef.current.getContext( "2d" );
-        const copy = CopyNinjaKakashiSensei( ctx, props.copySelector );
+        const copy = CopyNinjaKakashiSensei(
+            ctx, props.copySelector );
         ninja = copy.ninja;
         chakura = ninja.innerText;
         automat = new Automat({ 

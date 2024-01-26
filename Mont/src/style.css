@@ -1,8 +1,7 @@
 :root {
-    --root-fgr:        hsl(  15, 10%, 80% );
-    --root-bgr:        hsl( 240, 40%, 20% );
-    --deck-bg-color-a: hsl( 240, 50%, 40% );
-    --deck-bg-color-b: hsl( 180, 80%, 20% );
+    --root-fgr: hsl(  15, 10%, 80% );
+    --root-bgr: hsl( 240, 40%, 20% );
+    --deck-bgr: hsl( 240, 50%, 40% );
 }
 * {
     box-sizing: border-box;
@@ -37,9 +36,6 @@ body {
        done it can be set to block if necessary.
      */
     display: inline-block;
-    background-color: var( --deck-bg-color-a );
-}
-.CopyNinjaKakashi {
-    background-color: var( --deck-bg-color-b );
+    background-color: var( --deck-bgr );
 }
 /* Fin */
