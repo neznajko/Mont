@@ -25,7 +25,7 @@ body {
     width: 70%;
     height: 50%;
     background-color: var( --root-bgr );
-    font: 52px monospace;
+    font: 32px monospace;
 }
 .Mont {
     position: absolute;

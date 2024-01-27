@@ -53,7 +53,17 @@ class Cruiser extends React.Component {
         }
         return 0;
     }
+    setCanvasesDisplay( display_value ){
+        const canvases = document.getElementsByTagName( "canvas" );
+        for( let j = 0; j < canvases.length; ++j ){
+            canvases[j].style.display = display_value;
+        }
+    }
     onKeyDown = e => {
+        this.setCanvasesDisplay( "block" ); 
+        setTimeout( () => {
+            this.setCanvasesDisplay( "none" ); 
+        }, 2000 );
         const inc = this.getInc( e.key );
         if( inc ){
             this.setState( state => {
