@@ -22,10 +22,10 @@ body {
     background-color: var( --root-bgr );
 }
 #cruiser {
-    width: 60%;
-    height: 80%;
-    background-color: #00f;
-    font: 22px monospace;
+    width: 70%;
+    height: 50%;
+    background-color: var( --root-bgr );
+    font: 52px monospace;
 }
 .Mont {
     position: absolute;
@@ -36,6 +36,6 @@ body {
        done it can be set to block if necessary.
      */
     display: inline-block;
-    background-color: var( --deck-bgr );
+    background-color: var( --root-bgr );
 }
 /* Fin */

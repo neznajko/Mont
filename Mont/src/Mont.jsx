@@ -25,7 +25,21 @@ function CopyNinjaKakashiSensei( ctx, copySelector ){
         ninja:           copyNinja,
     };
 ////////////////////////////////////////////////////////////////
+}///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+function getRandomIntInclusive( min, max ){ // from moz://a
+    min = Math.ceil( min );
+    max = Math.floor( max );
+    // The maximum is inclusive and the minimum is inclusive
+    return Math.floor( Math.random()*( max - min + 1 ) + min );
 }
+function rndm_delay() {
+    return getRandomIntInclusive( 50, 250 );
+}
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 function Mont( props ) {
     const canvasRef = useRef( null );
@@ -47,7 +61,7 @@ function Mont( props ) {
             ctx: ctx, 
             offset: [ 0, copy.offsetY ],
             nfFrames: 5,
-            delay: [ 100, 100 ], 
+            delay: [ rndm_delay(), rndm_delay() ], 
             fgr: copy.color,
             bgr: copy.backgroundColor,
             chakura: chakura,
