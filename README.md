@@ -11,3 +11,12 @@
 ![Mont4](pix/Mont4.png)
 
 This was the m o n o s p a c e font. Have to figure what to do next.
+
+After a long thinking I came with something, you can check the video *Mont3.mkv*, if you want to.
+The program is in dev mode so if you want to try it, you need *npm* cos it uses ***vite + React***,
+then move to *Mont* subdirectory and type:
+```bash
+> npm install
+> npm run dev
+```
+, but the program is very buggy:)
